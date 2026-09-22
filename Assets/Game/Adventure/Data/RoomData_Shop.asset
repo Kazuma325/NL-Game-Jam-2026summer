@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a4667dc5161bb74b8bd1cf9604c4731, type: 3}
+  m_Name: RoomData_Shop
+  m_EditorClassIdentifier: Assembly-CSharp::ShopGame.Adventure.Data.RoomData
+  roomId: Shop
+  displayName: Shop
+  connections:
+  - connectionId: Shop.ToStorage
+    targetRoomId: Storage
+    direction: 1
+    accessRequirement:
+      type: 0
+      requirementId: 
+  - connectionId: Shop.ToControlRoom
+    targetRoomId: ControlRoom
+    direction: 0
+    accessRequirement:
+      type: 1
+      requirementId: Knowledge.ControlRoomPassword
