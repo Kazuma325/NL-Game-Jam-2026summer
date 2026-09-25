@@ -1,0 +1,7 @@
+id: phonenumber
+title: 電話番号
+keywords: 秘匿電話番号
+
+#電話番号
+
+修理屋の店長　ウィリアム・カーター

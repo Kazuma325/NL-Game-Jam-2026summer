@@ -49,6 +49,7 @@ namespace ShopGame.Core.Bootstrap
             var browserManager = new BrowserManager(eventBus);
             var manualLinkInteraction = new ManualLinkInteractionController(browserManager, knowledgeSelection);
             var manualSearch = new ManualSearchManager(manualPages);
+            var craftingStation = new CraftingStation(eventBus);
 
             Context = new GameContext(
                 eventBus,
@@ -66,7 +67,8 @@ namespace ShopGame.Core.Bootstrap
                 manualImageRepository,
                 browserManager,
                 manualLinkInteraction,
-                manualSearch);
+                manualSearch,
+                craftingStation);
         }
     }
 }

@@ -45,6 +45,8 @@ namespace ShopGame.Core.Context
 
         public ManualSearchManager ManualSearch { get; }
 
+        public CraftingStation CraftingStation { get; }
+
         public GameContext(
             GameEventBus eventBus,
             KnowledgeState knowledge,
@@ -61,7 +63,8 @@ namespace ShopGame.Core.Context
             ManualImageRepository manualImages,
             BrowserManager browser,
             ManualLinkInteractionController manualLinks,
-            ManualSearchManager manualSearch)
+            ManualSearchManager manualSearch,
+            CraftingStation craftingStation)
         {
             EventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
             Knowledge = knowledge ?? throw new ArgumentNullException(nameof(knowledge));
@@ -79,6 +82,7 @@ namespace ShopGame.Core.Context
             Browser = browser ?? throw new ArgumentNullException(nameof(browser));
             ManualLinks = manualLinks ?? throw new ArgumentNullException(nameof(manualLinks));
             ManualSearch = manualSearch ?? throw new ArgumentNullException(nameof(manualSearch));
+            CraftingStation = craftingStation ?? throw new ArgumentNullException(nameof(craftingStation));
         }
     }
 }
