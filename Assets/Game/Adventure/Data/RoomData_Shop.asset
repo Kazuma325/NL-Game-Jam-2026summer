@@ -21,9 +21,11 @@ MonoBehaviour:
     accessRequirement:
       type: 0
       requirementId: 
+    requiredKnowledgeId: 
   - connectionId: Shop.ToControlRoom
     targetRoomId: ControlRoom
     direction: 0
     accessRequirement:
-      type: 1
-      requirementId: Knowledge.ControlRoomPassword
+      type: 0
+      requirementId: 
+    requiredKnowledgeId: ControlRoomPassword

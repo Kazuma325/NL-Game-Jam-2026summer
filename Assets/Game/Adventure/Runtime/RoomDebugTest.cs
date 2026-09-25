@@ -13,8 +13,6 @@ public class RoomDebugTest : MonoBehaviour
 
         Debug.Log(gameBootstrap.Context.Navigation.MoveRight());
         Debug.Log(gameBootstrap.Context.World.CurrentRoomId);
-
-        gameBootstrap.Context.Knowledge.AddKnowledge("Knowledge.ControlRoomPassword");
     }
 
     // Update is called once per frame

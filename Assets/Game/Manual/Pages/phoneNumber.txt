@@ -1,0 +1,24 @@
+id: phoneNumber
+title: 電話番号
+keywords: 電話番号, 電話
+
+# 電話番号
+
+この店に置かれている[[電話機|telephone|none]]から電話することができる。ああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ
+
+a
+
+[style=warning]重要：現在、この電話機は使用できない。[/style]
+[style=important]重要：現在、この電話機は使用できない。[/style]
+[style=small]重要：現在、この電話機は使用できない。[/style]
+
+---
+[image: telephone.png]
+
+## 使用方法
+
+電話に向かって電話番号を持った状態で左クリック
+
+[note]
+[style=warning]この電話機は現在使用できない。[/style]
+[/note]

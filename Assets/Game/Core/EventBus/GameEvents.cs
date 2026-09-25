@@ -61,4 +61,12 @@ namespace ShopGame.Core.EventBus
             ReasonId = reasonId;
         }
     }
+
+    public readonly struct BrowserChangedEvent
+    {
+    }
+
+    public readonly struct KnowledgeSlotChangedEvent
+    {
+    }
 }

@@ -1,5 +1,7 @@
 using System;
+using ShopGame.Adventure.Runtime;
 using ShopGame.Core.Bootstrap;
+using ShopGame.Interaction.Runtime;
 using UnityEngine;
 
 namespace ShopGame.Adventure.View
@@ -22,9 +24,16 @@ namespace ShopGame.Adventure.View
 
         public void OnInteract()
         {
-            gameBootstrap.Context.Navigation.MoveThroughConnection(doorView.ConnectionId);
+            var context = gameBootstrap.Context;
+            var connection = context.Rooms.GetConnection(doorView.ConnectionId);
 
-            Debug.Log(gameBootstrap.Context.World.CurrentRoomId);
+            if (string.IsNullOrEmpty(connection.RequiredKnowledgeId)) return;
+
+            var door = new Door(connection.ConnectionId, connection.RequiredKnowledgeId);
+
+            KnowledgeUseResult result = context.KnowledgeInteraction.TryUseKnowledge(door, () => context.Navigation.MoveThroughConnection(door.ConnectionId));
+
+            Debug.Log($"Door interaction result: {result}");
         }
     }
 }

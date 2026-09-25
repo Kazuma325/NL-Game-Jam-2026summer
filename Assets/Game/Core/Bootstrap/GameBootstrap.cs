@@ -3,11 +3,14 @@ using ShopGame.Adventure.Data;
 using ShopGame.Adventure.Runtime;
 using ShopGame.Core.Context;
 using GameEventBus = ShopGame.Core.EventBus.EventBus;
+using ShopGame.Interaction.Runtime;
 using ShopGame.Loop;
 using ShopGame.State.Knowledge;
 using ShopGame.State.Progress;
 using ShopGame.State.World;
+using ShopGame.Manual.Runtime;
 using UnityEngine;
+using ShopGame.Browser.Runtime;
 
 namespace ShopGame.Core.Bootstrap
 {
@@ -18,6 +21,12 @@ namespace ShopGame.Core.Bootstrap
 
         [SerializeField]
         private RoomData[] roomData = Array.Empty<RoomData>();
+
+        [SerializeField]
+        private TextAsset[] manualSources = Array.Empty<TextAsset>();
+
+        [SerializeField]
+        private ManualImageEntry[] manualImages = Array.Empty<ManualImageEntry>();
 
         public GameContext Context { get; private set; }
 
@@ -31,8 +40,33 @@ namespace ShopGame.Core.Bootstrap
             var roomAccess = new RoomAccessChecker(knowledge, progress);
             var rooms = new RoomManager(world, eventBus, roomData, roomAccess);
             var navigation = new RoomNavigationController(rooms);
+            var knowledgeSlot = new KnowledgeSlot(eventBus);
+            var knowledgeInteraction = new KnowledgeInteractionController(knowledgeSlot);
+            var knowledgeSelection = new KnowledgeSelectionController(knowledgeSlot);
+            var manualParser = new ManualParser();
+            var manualPages = new ManualPageRepository(manualParser, manualSources);
+            var manualImageRepository = new ManualImageRepository(manualImages);
+            var browserManager = new BrowserManager(eventBus);
+            var manualLinkInteraction = new ManualLinkInteractionController(browserManager, knowledgeSelection);
+            var manualSearch = new ManualSearchManager(manualPages);
 
-            Context = new GameContext(eventBus, knowledge, progress, world, loop, rooms, roomAccess, navigation);
+            Context = new GameContext(
+                eventBus,
+                knowledge,
+                progress,
+                world,
+                loop,
+                rooms,
+                roomAccess,
+                navigation,
+                knowledgeSlot,
+                knowledgeInteraction,
+                knowledgeSelection,
+                manualPages,
+                manualImageRepository,
+                browserManager,
+                manualLinkInteraction,
+                manualSearch);
         }
     }
 }
