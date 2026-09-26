@@ -1,13 +1,14 @@
-using System;
 using ShopGame.Adventure.Runtime;
-using GameEventBus = ShopGame.Core.EventBus.EventBus;
+using ShopGame.Browser.Runtime;
+using ShopGame.Dialogue.Runtime;
 using ShopGame.Interaction.Runtime;
 using ShopGame.Loop;
+using ShopGame.Manual.Runtime;
 using ShopGame.State.Knowledge;
 using ShopGame.State.Progress;
 using ShopGame.State.World;
-using ShopGame.Manual.Runtime;
-using ShopGame.Browser.Runtime;
+using System;
+using GameEventBus = ShopGame.Core.EventBus.EventBus;
 
 namespace ShopGame.Core.Context
 {
@@ -35,6 +36,12 @@ namespace ShopGame.Core.Context
 
         public KnowledgeSelectionController KnowledgeSelection { get; }
 
+        public DialogueResolver DialogueResolver { get; }
+
+        public DialogueInteractionController DialogueInteraction { get; }
+
+        public DialogueManager DialogueManager { get; }
+
         public ManualPageRepository ManualPages { get; }
 
         public ManualImageRepository ManualImages { get; }
@@ -59,6 +66,9 @@ namespace ShopGame.Core.Context
             KnowledgeSlot knowledgeSlot,
             KnowledgeInteractionController knowledgeInteraction,
             KnowledgeSelectionController knowledgeSelection,
+            DialogueResolver dialogueResolver,
+            DialogueInteractionController dialogueInteraction,
+            DialogueManager dialogueManager,
             ManualPageRepository manualPages,
             ManualImageRepository manualImages,
             BrowserManager browser,
@@ -77,6 +87,9 @@ namespace ShopGame.Core.Context
             KnowledgeSlot = knowledgeSlot ?? throw new ArgumentNullException(nameof(knowledgeSlot));
             KnowledgeInteraction = knowledgeInteraction ?? throw new ArgumentNullException(nameof(knowledgeInteraction));
             KnowledgeSelection = knowledgeSelection ?? throw new ArgumentNullException(nameof(knowledgeSelection));
+            DialogueResolver = dialogueResolver ?? throw new ArgumentNullException(nameof(dialogueResolver));
+            DialogueInteraction = dialogueInteraction ?? throw new ArgumentNullException(nameof(dialogueInteraction));
+            DialogueManager = dialogueManager ?? throw new ArgumentNullException(nameof(dialogueManager));
             ManualPages = manualPages ?? throw new ArgumentNullException(nameof(manualPages));
             ManualImages = manualImages ?? throw new ArgumentNullException(nameof(manualImages));
             Browser = browser ?? throw new ArgumentNullException(nameof(browser));
