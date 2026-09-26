@@ -1,16 +1,17 @@
-using System;
 using ShopGame.Adventure.Data;
 using ShopGame.Adventure.Runtime;
+using ShopGame.Browser.Runtime;
 using ShopGame.Core.Context;
-using GameEventBus = ShopGame.Core.EventBus.EventBus;
+using ShopGame.Interaction.Data;
 using ShopGame.Interaction.Runtime;
 using ShopGame.Loop;
+using ShopGame.Manual.Runtime;
 using ShopGame.State.Knowledge;
 using ShopGame.State.Progress;
 using ShopGame.State.World;
-using ShopGame.Manual.Runtime;
+using System;
 using UnityEngine;
-using ShopGame.Browser.Runtime;
+using GameEventBus = ShopGame.Core.EventBus.EventBus;
 
 namespace ShopGame.Core.Bootstrap
 {
@@ -27,6 +28,9 @@ namespace ShopGame.Core.Bootstrap
 
         [SerializeField]
         private ManualImageEntry[] manualImages = Array.Empty<ManualImageEntry>();
+
+        [SerializeField]
+        private RecipeData[] recipeData = Array.Empty<RecipeData>();
 
         public GameContext Context { get; private set; }
 
@@ -50,6 +54,8 @@ namespace ShopGame.Core.Bootstrap
             var manualLinkInteraction = new ManualLinkInteractionController(browserManager, knowledgeSelection);
             var manualSearch = new ManualSearchManager(manualPages);
             var craftingStation = new CraftingStation(eventBus);
+            var recipeMatcher = new RecipeMatcher(recipeData);
+            var craftResultHandler = new CraftResultHandler(eventBus, recipeMatcher);
 
             Context = new GameContext(
                 eventBus,

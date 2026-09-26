@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ShopGame.Adventure.Data
 {
-    [CreateAssetMenu(fileName = "RoomData", menuName = "Shop Game/Adventure/Room Data")]
+    [CreateAssetMenu(fileName = "RoomData", menuName = "ShopGame/Adventure/Room Data")]
     public sealed class RoomData : ScriptableObject
     {
         [SerializeField]
