@@ -48,6 +48,10 @@ namespace ShopGame.Manual.View
 
             ClearContent();
 
+            DisplayBlankLine();
+            DisplayBlankLine();
+            DisplayBlankLine();
+
             foreach (ManualBlockData block in page.Blocks)
             {
                 if (block == null)
@@ -55,6 +59,10 @@ namespace ShopGame.Manual.View
 
                 DisplayBlock(block);
             }
+
+            DisplayBlankLine();
+            DisplayBlankLine();
+            DisplayBlankLine();
         }
 
         private void DisplayBlock(ManualBlockData block)
@@ -86,6 +94,11 @@ namespace ShopGame.Manual.View
             if (block is SeparatorBlockData)
             {
                 DisplaySeparator();
+                return;
+            }
+            if (block is BlankLineBlockData)
+            {
+                DisplayBlankLine();
                 return;
             }
 
@@ -136,8 +149,7 @@ namespace ShopGame.Manual.View
                 new GameObject(
                     "ManualImage",
                     typeof(RectTransform),
-                    typeof(Image),
-                    typeof(LayoutElement));
+                    typeof(Image));
 
             imageObject.transform.SetParent(
                 contentRoot,
@@ -152,12 +164,6 @@ namespace ShopGame.Manual.View
 
             image.preserveAspect =
                 true;
-
-            LayoutElement layoutElement =
-                imageObject.GetComponent<LayoutElement>();
-
-            layoutElement.preferredHeight =
-                240f;
         }
 
         private void DisplayNote(
@@ -254,6 +260,25 @@ namespace ShopGame.Manual.View
 
             rectTransform.sizeDelta =
                 new Vector2(0f, 1f);
+        }
+
+        private void DisplayBlankLine()
+        {
+            GameObject blankLineObject =
+                new GameObject(
+                    "ManualBlankLine",
+                    typeof(RectTransform),
+                    typeof(LayoutElement));
+
+            blankLineObject.transform.SetParent(
+                contentRoot,
+                false);
+
+            LayoutElement layoutElement =
+                blankLineObject.GetComponent<LayoutElement>();
+
+            layoutElement.preferredHeight =
+                bodyFontSize;
         }
 
         private TMP_Text CreateTextObject(Transform parent)

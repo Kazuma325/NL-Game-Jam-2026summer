@@ -65,13 +65,24 @@ namespace ShopGame.Manual.View
             searchButton.onClick.RemoveAllListeners();
             searchButton.onClick.AddListener(
                 HandleSearchClicked);
+
+            searchInput.onSubmit.RemoveAllListeners();
+            searchInput.onSubmit.AddListener(
+                HandleSearchSubmitted);
         }
 
         private void HandleSearchClicked()
         {
-            string keyword =
-                searchInput.text;
+            ExecuteSearch(searchInput.text);
+        }
 
+        private void HandleSearchSubmitted(string keyword)
+        {
+            ExecuteSearch(keyword);
+        }
+
+        private void ExecuteSearch(string keyword)
+        {
             IReadOnlyList<ManualPageData> results =
                 searchManager.Search(keyword);
 
@@ -110,6 +121,21 @@ namespace ShopGame.Manual.View
             {
                 Destroy(
                     resultsContent.GetChild(i).gameObject);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (searchButton != null)
+            {
+                searchButton.onClick.RemoveListener(
+                    HandleSearchClicked);
+            }
+
+            if (searchInput != null)
+            {
+                searchInput.onSubmit.RemoveListener(
+                    HandleSearchSubmitted);
             }
         }
     }

@@ -181,6 +181,12 @@ namespace ShopGame.Manual.Runtime
                     ref currentLine);
             }
 
+            if (line == "[blank]")
+            {
+                currentLine++;
+                return new BlankLineBlockData();
+            }
+
             if (line == "[note]")
             {
                 return ParseNoteBlock(
@@ -319,6 +325,7 @@ namespace ShopGame.Manual.Runtime
                 }
 
                 if (line == "---" ||
+                    line == "[blank]" ||
                     line == "[note]" ||
                     line.StartsWith("[image:") ||
                     line.StartsWith("#"))

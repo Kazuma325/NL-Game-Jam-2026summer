@@ -71,14 +71,18 @@ namespace ShopGame.Interaction.View
             ClearMaterialEntries();
 
             foreach (string materialId in
-                     craftingStation.GetInsertedMaterials())
+         craftingStation.GetInsertedMaterials())
             {
                 CraftingMaterialEntryView entry =
                     Instantiate(
                         materialEntryPrefab,
                         materialsContent);
 
-                entry.Initialize(materialId);
+                string displayName =
+                    craftingStation.GetMaterialDisplayName(
+                        materialId);
+
+                entry.Initialize(displayName);
             }
         }
 

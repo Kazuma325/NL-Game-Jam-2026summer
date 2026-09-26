@@ -139,6 +139,8 @@ MonoBehaviour:
   tabButton: {fileID: 5959424002500108313}
   label: {fileID: 6952924199300670197}
   closeButton: {fileID: 3487391964242259646}
+  activeColor: {r: 0.92156863, g: 0.9372549, b: 0.972549, a: 1}
+  inactiveColor: {r: 0.78039217, g: 0.8, b: 0.8509804, a: 1}
 --- !u!114 &2947818399221631067
 MonoBehaviour:
   m_ObjectHideFlags: 0

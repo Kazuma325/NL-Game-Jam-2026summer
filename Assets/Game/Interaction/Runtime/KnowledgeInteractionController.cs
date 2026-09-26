@@ -32,5 +32,34 @@ namespace ShopGame.Interaction.Runtime
 
             return KnowledgeUseResult.Success;
         }
+
+        public KnowledgeUseResult TryUseKnowledgeOnCraftingStation(
+            CraftingStation craftingStation)
+        {
+            if (craftingStation == null)
+                throw new ArgumentNullException(
+                    nameof(craftingStation));
+
+            if (!knowledgeSlot.HasSelection)
+                return KnowledgeUseResult.NotApplicable;
+
+            string knowledgeId =
+                knowledgeSlot.SelectedKnowledgeId;
+
+            string displayName =
+                knowledgeSlot.SelectedKnowledgeDisplayName;
+
+            bool added =
+                craftingStation.AddMaterial(
+                    knowledgeId,
+                    displayName);
+
+            if (!added)
+                return KnowledgeUseResult.Failed;
+
+            knowledgeSlot.Clear();
+
+            return KnowledgeUseResult.Success;
+        }
     }
 }

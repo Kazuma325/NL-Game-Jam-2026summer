@@ -12,6 +12,9 @@ namespace ShopGame.Interaction.Runtime
         private readonly HashSet<string> insertedMaterialIds =
             new();
 
+        private readonly Dictionary<string, string>
+    materialDisplayNames = new();
+
         public IReadOnlyCollection<string> InsertedMaterialIds =>
             insertedMaterialIds;
 
@@ -62,6 +65,35 @@ namespace ShopGame.Interaction.Runtime
             return true;
         }
 
+        public bool AddMaterial(
+    string materialId,
+    string displayName)
+        {
+            ValidateMaterialId(materialId);
+
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                throw new ArgumentException(
+                    "Display name must not be null, empty, or whitespace.",
+                    nameof(displayName));
+            }
+
+            bool added =
+                insertedMaterialIds.Add(materialId);
+
+            if (!added)
+            {
+                return false;
+            }
+
+            materialDisplayNames[materialId] = displayName;
+
+            eventBus.Publish(
+                new CraftingMaterialsChangedEvent());
+
+            return true;
+        }
+
         public bool HasMaterial(string materialId)
         {
             ValidateMaterialId(materialId);
@@ -82,6 +114,7 @@ namespace ShopGame.Interaction.Runtime
             }
 
             insertedMaterialIds.Clear();
+            materialDisplayNames.Clear();
 
             eventBus.Publish(
                 new CraftingMaterialsChangedEvent());
@@ -114,6 +147,46 @@ namespace ShopGame.Interaction.Runtime
                     "Material ID must not be null, empty, or whitespace.",
                     nameof(materialId));
             }
+        }
+
+        public void SetMaterialDisplayName(
+    string materialId,
+    string displayName)
+        {
+            if (string.IsNullOrWhiteSpace(materialId))
+            {
+                throw new ArgumentException(
+                    "Material ID must not be null, empty, or whitespace.",
+                    nameof(materialId));
+            }
+
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                throw new ArgumentException(
+                    "Display name must not be null, empty, or whitespace.",
+                    nameof(displayName));
+            }
+
+            if (!insertedMaterialIds.Contains(materialId))
+            {
+                throw new InvalidOperationException(
+                    $"Material '{materialId}' has not been inserted.");
+            }
+
+            materialDisplayNames[materialId] = displayName;
+        }
+
+        public string GetMaterialDisplayName(
+    string materialId)
+        {
+            if (materialDisplayNames.TryGetValue(
+                    materialId,
+                    out string displayName))
+            {
+                return displayName;
+            }
+
+            return materialId;
         }
     }
 }

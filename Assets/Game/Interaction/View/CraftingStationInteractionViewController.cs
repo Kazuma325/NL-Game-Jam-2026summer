@@ -32,8 +32,9 @@ namespace ShopGame.Interaction.View
         private void HandleInteractionClicked()
         {
             KnowledgeUseResult result =
-                knowledgeInteractionController.TryUseKnowledge(
-                    craftingStation);
+                knowledgeInteractionController
+                    .TryUseKnowledgeOnCraftingStation(
+                        craftingStation);
 
             Debug.Log(
                 $"CraftingStation interaction result: {result}");

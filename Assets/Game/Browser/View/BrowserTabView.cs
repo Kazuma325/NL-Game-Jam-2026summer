@@ -16,6 +16,9 @@ namespace ShopGame.Browser.View
         [SerializeField]
         private Button closeButton;
 
+        [SerializeField]
+        private Color activeColor, inactiveColor;
+
         public int TabId { get; private set; }
 
         private Action<int> onSelected;
@@ -65,7 +68,14 @@ namespace ShopGame.Browser.View
 
         public void SetActive(bool active)
         {
-            // 今回は見た目の変更だけ後で実装する。
+            if (active)
+            {
+                tabButton.image.color = activeColor;
+            }
+            else
+            {
+                tabButton.image.color = inactiveColor;
+            }
         }
 
         private void HandleTabClicked()
