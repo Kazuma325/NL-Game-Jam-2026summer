@@ -5,6 +5,7 @@ using ShopGame.Browser.Runtime;
 using ShopGame.Core.Context;
 using ShopGame.Dialogue.Data;
 using ShopGame.Dialogue.Runtime;
+using ShopGame.Dialogue.View;
 using ShopGame.Interaction.Data;
 using ShopGame.Interaction.Runtime;
 using ShopGame.Loop;
@@ -44,6 +45,24 @@ namespace ShopGame.Core.Bootstrap
 
         public GameContext Context { get; private set; }
 
+        [SerializeField]
+        private DialoguePortraitEntry[] dialoguePortraitEntries = Array.Empty<DialoguePortraitEntry>();
+
+        [SerializeField]
+        private DialogueBackgroundEntry[] dialogueBackgroundEntries = Array.Empty<DialogueBackgroundEntry>();
+
+        public DialoguePortraitRepository DialoguePortraitRepository
+        {
+            get;
+            private set;
+        }
+
+        public DialogueBackgroundRepository DialogueBackgroundRepository
+        {
+            get;
+            private set;
+        }
+
         private void Awake()
         {
             var eventBus = new GameEventBus();
@@ -71,6 +90,8 @@ namespace ShopGame.Core.Bootstrap
             var dialogueLog = new DialogueLog();
             var dialogueResolver = new DialogueResolver(dialogueData);
             var dialogueInteraction = new DialogueInteractionController(knowledgeSlot, dialogueResolver);
+            DialoguePortraitRepository = new DialoguePortraitRepository(dialoguePortraitEntries);
+            DialogueBackgroundRepository = new DialogueBackgroundRepository(dialogueBackgroundEntries);
             var dialogueManager = new DialogueManager(eventBus, dialoguePlayback, dialogueTypewriter, dialogueLog);
             var manualParser = new ManualParser();
             var manualPages = new ManualPageRepository(manualParser, manualSources);

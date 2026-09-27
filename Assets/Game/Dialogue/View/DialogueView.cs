@@ -9,10 +9,14 @@ namespace ShopGame.Dialogue.View
     {
         [SerializeField] private TMP_Text speakerNameText;
         [SerializeField] private TMP_Text dialogueText;
+        [SerializeField] private DialoguePortraitView portraitView;
+        [SerializeField] private DialogueBackgroundView backgroundView;
 
         public void DisplayLine(
-    DialogueLine line,
-    int visibleCharacterCount)
+            DialogueLine line,
+            int visibleCharacterCount,
+            DialoguePortraitRepository portraitRepository,
+            DialogueBackgroundRepository backgroundRepository)
         {
             if (line == null)
                 throw new ArgumentNullException(nameof(line));
@@ -29,8 +33,7 @@ namespace ShopGame.Dialogue.View
                 throw new ArgumentOutOfRangeException(
                     nameof(visibleCharacterCount));
 
-            speakerNameText.text =
-                line.SpeakerName;
+            speakerNameText.text = line.SpeakerName;
 
             int characterCount =
                 Mathf.Min(
@@ -38,7 +41,23 @@ namespace ShopGame.Dialogue.View
                     line.Text.Length);
 
             dialogueText.text =
-                line.Text.Substring(0, characterCount);
+                line.Text.Substring(
+                    0,
+                    characterCount);
+
+            if (portraitView != null)
+            {
+                portraitView.Display(
+                    line.PortraitId,
+                    portraitRepository);
+            }
+
+            if (backgroundView != null)
+            {
+                backgroundView.Display(
+                    line.BackgroundId,
+                    backgroundRepository);
+            }
         }
 
         public void Clear()
@@ -48,6 +67,12 @@ namespace ShopGame.Dialogue.View
 
             if (dialogueText != null)
                 dialogueText.text = string.Empty;
+
+            if (portraitView != null)
+                portraitView.Clear();
+
+            if (backgroundView != null)
+                backgroundView.Clear();
         }
     }
 }

@@ -11,10 +11,14 @@ namespace ShopGame.Dialogue.View
 
         private DialogueManager dialogueManager;
         private EventBus eventBus;
+        private DialoguePortraitRepository portraitRepository;
+        private DialogueBackgroundRepository backgroundRepository;
 
         public void Initialize(
             DialogueManager dialogueManager,
-            EventBus eventBus)
+            EventBus eventBus,
+            DialoguePortraitRepository portraitRepository,
+            DialogueBackgroundRepository backgroundRepository)
         {
             this.dialogueManager =
                 dialogueManager
@@ -25,6 +29,16 @@ namespace ShopGame.Dialogue.View
                 eventBus
                 ?? throw new ArgumentNullException(
                     nameof(eventBus));
+
+            this.portraitRepository =
+                portraitRepository
+                ?? throw new ArgumentNullException(
+                    nameof(portraitRepository));
+
+            this.backgroundRepository =
+                backgroundRepository
+                ?? throw new ArgumentNullException(
+                    nameof(backgroundRepository));
 
             if (dialogueView == null)
             {
@@ -100,7 +114,9 @@ namespace ShopGame.Dialogue.View
 
             dialogueView.DisplayLine(
                 currentLine,
-                dialogueManager.CurrentCharacterIndex);
+                dialogueManager.CurrentCharacterIndex,
+                portraitRepository,
+                backgroundRepository);
         }
     }
 }

@@ -25,7 +25,9 @@ namespace ShopGame.Dialogue.View
 
             presenter.Initialize(
                 gameBootstrap.Context.DialogueManager,
-                gameBootstrap.Context.EventBus);
+                gameBootstrap.Context.EventBus,
+                gameBootstrap.DialoguePortraitRepository,
+                gameBootstrap.DialogueBackgroundRepository);
         }
     }
 }

@@ -92,7 +92,7 @@ namespace ShopGame.Dialogue.Runtime
                     dialogueId,
                     index,
                     record[2],
-                    record[3],
+                    record[3].Replace("\\n", "\n"),
                     record[4],
                     record[5],
                     stopSkip);
