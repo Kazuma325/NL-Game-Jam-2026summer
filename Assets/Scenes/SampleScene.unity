@@ -347,6 +347,7 @@ MonoBehaviour:
   - {fileID: 4900000, guid: 43dd4b7c5560c544cb34a39f4ff74fc1, type: 3}
   - {fileID: 4900000, guid: 3778ad876128fbe45b98860900e16768, type: 3}
   - {fileID: 4900000, guid: 143dc639ecd172841be60a4736a187d2, type: 3}
+  - {fileID: 4900000, guid: 06172e73f9bac424a8a95d25467741ae, type: 3}
   manualImages:
   - path: telephone.png
     sprite: {fileID: 21300000, guid: 8abc353f9e4312b4fbe4154f3f965427, type: 3}
@@ -1309,12 +1310,12 @@ GameObject:
   - component: {fileID: 279839793}
   - component: {fileID: 279839792}
   m_Layer: 5
-  m_Name: Storage
+  m_Name: Backyard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &279839791
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1328,6 +1329,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 821437179}
+  - {fileID: 1211269643}
   m_Father: {fileID: 1056467157}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2347,7 +2349,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &535322648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3229,7 +3231,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &798405480
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4335,12 +4337,12 @@ GameObject:
   - component: {fileID: 1066957874}
   - component: {fileID: 1066957873}
   m_Layer: 5
-  m_Name: Shop
+  m_Name: Desk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1066957872
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4354,7 +4356,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1830479671}
-  - {fileID: 1211269643}
   m_Father: {fileID: 1056467157}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4957,12 +4958,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211269642}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1066957872}
+  m_Father: {fileID: 279839791}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -5636,7 +5637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1407792660
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7925,12 +7926,12 @@ GameObject:
   - component: {fileID: 1877452543}
   - component: {fileID: 1877452542}
   m_Layer: 5
-  m_Name: ControlRoom
+  m_Name: Shop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1877452541
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7971,7 +7972,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7a770ab4ed204ca478bb7f40b950b02d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1dcf75f1811865248bd6b9837612066e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8282,7 +8283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1970997151
 Animator:
   serializedVersion: 7
@@ -8645,7 +8646,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2115681733
 MonoBehaviour:
   m_ObjectHideFlags: 0

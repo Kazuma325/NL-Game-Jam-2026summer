@@ -42,8 +42,15 @@ namespace ShopGame.Browser.Runtime
                     "search",
                     true);
 
+            BrowserTab explanationTab =
+                new BrowserTab(
+                    nextTabId++,
+                    "explanation",
+                    false);
+
             tabs.Add(searchTab);
-            activeTabId = searchTab.TabId;
+            tabs.Add(explanationTab);
+            activeTabId = explanationTab.TabId;
         }
 
         public void OpenPage(string pageId)
