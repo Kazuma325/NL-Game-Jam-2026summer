@@ -21,7 +21,11 @@ MonoBehaviour:
   requiredProgressIds: []
   minimumLoopCount: 0
   maximumLoopCount: -1
+  craftingCondition:
+    Type: 0
+    ItemId: 
   requiredRoomId: 
   requiredDeviceStatus: 
   requiredActiveEventIds: []
   consumeKnowledge: 0
+  endLoopOnComplete: 0

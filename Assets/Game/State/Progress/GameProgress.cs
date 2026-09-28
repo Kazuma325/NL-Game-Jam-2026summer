@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using ShopGame.Core.EventBus;
 
 namespace ShopGame.State.Progress
@@ -7,42 +6,43 @@ namespace ShopGame.State.Progress
     public sealed class GameProgress
     {
         private readonly EventBus eventBus;
-        private readonly HashSet<string> completedProgressIds = new();
+
+        public int CurrentProgress { get; private set; }
 
         public GameProgress(EventBus eventBus)
         {
-            this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
+            this.eventBus = eventBus
+                ?? throw new ArgumentNullException(nameof(eventBus));
+
+            CurrentProgress = 0;
         }
 
-        public bool HasProgress(string progressId)
+        public bool AdvanceTo(int targetProgress)
         {
-            ValidateProgressId(progressId);
-            return completedProgressIds.Contains(progressId);
-        }
+            if (targetProgress < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(targetProgress),
+                    "Progress must not be negative.");
+            }
 
-        public bool CompleteProgress(string progressId)
-        {
-            ValidateProgressId(progressId);
-            if (!completedProgressIds.Add(progressId))
+            if (targetProgress <= CurrentProgress)
             {
                 return false;
             }
 
-            eventBus.Publish(new ProgressCompletedEvent(progressId));
+            CurrentProgress = targetProgress;
+
+            eventBus.Publish(
+                new ProgressCompletedEvent(
+                    CurrentProgress.ToString()));
+
             return true;
         }
 
-        public IReadOnlyCollection<string> GetAllProgress()
+        public void Reset()
         {
-            return completedProgressIds;
-        }
-
-        private static void ValidateProgressId(string progressId)
-        {
-            if (string.IsNullOrWhiteSpace(progressId))
-            {
-                throw new ArgumentException("Progress ID must not be null, empty, or whitespace.", nameof(progressId));
-            }
+            CurrentProgress = 0;
         }
     }
 }

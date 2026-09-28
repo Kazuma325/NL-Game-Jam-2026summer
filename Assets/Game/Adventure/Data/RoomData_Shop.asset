@@ -15,17 +15,10 @@ MonoBehaviour:
   roomId: Shop
   displayName: Shop
   connections:
-  - connectionId: Shop.ToStorage
-    targetRoomId: Storage
+  - connectionId: Shop.ToBackyard
+    targetRoomId: Backyard
     direction: 1
     accessRequirement:
       type: 0
       requirementId: 
     requiredKnowledgeId: 
-  - connectionId: Shop.ToControlRoom
-    targetRoomId: ControlRoom
-    direction: 0
-    accessRequirement:
-      type: 0
-      requirementId: 
-    requiredKnowledgeId: ControlRoomPassword

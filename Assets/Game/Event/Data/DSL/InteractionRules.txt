@@ -1,0 +1,214 @@
+rule owner_disposer_scene0
+trigger interaction owner
+priority 100
+
+conditions all
+    progress equals 0
+    owner present true
+    slot equals disposer
+end
+
+effects
+    dialogue owner_disposer
+    progress advance 1
+    loop end_after_dialogue
+end
+
+
+rule owner_click_scene0
+trigger interaction owner
+priority 10
+
+conditions all
+    progress equals 0
+    owner present true
+    slot not_equals disposer
+end
+
+effects
+    dialogue owner_click
+end
+
+
+rule owner_disposer_scene4
+trigger interaction owner
+priority 100
+
+conditions all
+    progress equals 4
+    owner present true
+    slot equals disposer
+end
+
+effects
+    dialogue owner_disposer
+    progress advance 5
+end
+
+
+rule control_click_banned_scene0
+trigger interaction control
+priority 100
+
+conditions all
+    progress equals 0
+end
+
+effects
+    dialogue control_click_banned
+end
+
+
+rule control_enter
+trigger interaction control
+priority 100
+
+conditions all
+    progress greater_or_equal 1
+    slot equals pass5
+end
+
+effects
+    dialogue control_enter
+    progress advance 2
+end
+
+
+rule control_click
+trigger interaction control
+priority 10
+
+conditions all
+    progress greater_or_equal 1
+    slot not_equals pass5
+end
+
+effects
+    dialogue control_click
+end
+
+
+rule study_click_banned
+trigger interaction study
+priority 100
+
+conditions any
+    progress equals 0
+
+    conditions all
+        progress greater_or_equal 1
+        owner present true
+    end
+end
+
+effects
+    dialogue study_click_banned
+end
+
+
+rule study_enter
+trigger interaction study
+priority 100
+
+conditions all
+    progress greater_or_equal 1
+    owner present false
+    slot equals pass3
+end
+
+effects
+    dialogue study_enter
+end
+
+
+rule study_click
+trigger interaction study
+priority 10
+
+conditions all
+    progress greater_or_equal 1
+    owner present false
+    slot not_equals pass3
+end
+
+effects
+    dialogue study_click
+end
+
+
+rule telephone_click_banned
+trigger interaction telephone
+priority 100
+
+conditions any
+    progress equals 0
+
+    conditions all
+        progress greater_or_equal 1
+        owner present true
+    end
+end
+
+effects
+    dialogue telephone_click_banned
+end
+
+
+rule telephone_call
+trigger interaction telephone
+priority 100
+
+conditions all
+    progress greater_or_equal 1
+    owner present false
+    slot equals phonenumber
+end
+
+effects
+    dialogue telephone_call
+    progress advance 3
+    loop end_after_dialogue
+end
+
+
+rule telephone_click
+trigger interaction telephone
+priority 10
+
+conditions all
+    progress greater_or_equal 1
+    owner present false
+    slot not_equals phonenumber
+end
+
+effects
+    dialogue telephone_click
+end
+
+
+rule customer_core
+trigger interaction customer
+priority 100
+
+conditions all
+    customer present true
+    slot equals coreattachments
+end
+
+effects
+    dialogue customer_core
+end
+
+
+rule customer_click
+trigger interaction customer
+priority 10
+
+conditions all
+    customer present true
+    slot not_equals coreattachments
+end
+
+effects
+    dialogue customer_click
+end

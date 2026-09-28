@@ -24,15 +24,11 @@ namespace ShopGame.Adventure.View
         private GameBootstrap gameBootstrap;
 
         [SerializeField]
-        private RoomView roomView;
-
-        [SerializeField]
         private RoomPanelBinding[] roomPanels = Array.Empty<RoomPanelBinding>();
 
         private void Start()
         {
             if (gameBootstrap == null) throw new InvalidOperationException("GameBootstrap is not assigned.");
-            if (roomView == null) throw new InvalidOperationException("RoomView is not assigned.");
 
             ValidateRoomPanels();
 
@@ -55,8 +51,6 @@ namespace ShopGame.Adventure.View
         private void DisplayCurrentRoom()
         {
             string currentRoomId = gameBootstrap.Context.Rooms.CurrentRoomId;
-
-            roomView.DisplayRoom(gameBootstrap.Context.Rooms.CurrentRoomdata);
 
             foreach (RoomPanelBinding binding in roomPanels)
             {

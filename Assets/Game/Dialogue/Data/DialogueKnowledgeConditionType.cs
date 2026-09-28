@@ -4,6 +4,7 @@ namespace ShopGame.Dialogue.Data
     {
         Any,
         Empty,
-        Specific
+        Specific,
+        NotSpecific
     }
 }

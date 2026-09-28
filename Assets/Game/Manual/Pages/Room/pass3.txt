@@ -1,7 +1,7 @@
 id: pass3
 title: パスワード
 keywords: 秘匿パスワード
-
+[blank]
 [note]
 このページは空白です
 [/note]

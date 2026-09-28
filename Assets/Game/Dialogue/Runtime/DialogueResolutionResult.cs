@@ -8,9 +8,12 @@ namespace ShopGame.Dialogue.Runtime
 
         public bool ConsumeKnowledge { get; }
 
+        public bool EndLoopOnComplete { get; }
+
         public DialogueResolutionResult(
             string dialogueId,
-            bool consumeKnowledge)
+            bool consumeKnowledge,
+            bool endLoopOnComplete)
         {
             if (string.IsNullOrWhiteSpace(dialogueId))
             {
@@ -21,6 +24,7 @@ namespace ShopGame.Dialogue.Runtime
 
             DialogueId = dialogueId;
             ConsumeKnowledge = consumeKnowledge;
+            EndLoopOnComplete = endLoopOnComplete;
         }
     }
 }

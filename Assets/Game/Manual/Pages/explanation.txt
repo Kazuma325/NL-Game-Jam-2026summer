@@ -1,7 +1,0 @@
-id: explanation
-title: PCの使い方
-keywords:PC, PCの使い方, 使い方, 説明
-
-# [[PCの使い方|explanation]]
-
-PCとマニュアルの使い方について説明です。

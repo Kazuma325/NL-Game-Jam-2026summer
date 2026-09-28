@@ -1,0 +1,24 @@
+id: sophia
+title: ソフィア聖教会
+keywords: ソフィア聖教会
+
+#ソフィア聖教会
+[blank]
+ソフィア聖教会は*ごく一般的なキリスト教派閥*です。
+2040年代から勢力を高め、いまでは*たくさん*の信者が信仰しています。
+信者からいただいた寄付金をアンドロイド開発などに提供する*慈善事業も*行っています。
+[blank]
+また、*******************
+[blank]
+[blank]
+[blank]
+[blank]
+[blank]
+[blank]
+[blank]
+[blank]
+[blank]
+[blank]
+[note]
+[style=important]外部からの変更が検知されました[/style]
+[/note]

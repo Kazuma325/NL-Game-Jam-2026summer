@@ -45,6 +45,9 @@ namespace ShopGame.Dialogue.Runtime
                 if (!MatchesWorld(dialogueData, context))
                     continue;
 
+                if (!MatchesCrafting(dialogueData, context))
+                    continue;
+
                 if (bestMatch == null ||
                     dialogueData.Priority > bestMatch.Priority)
                 {
@@ -57,7 +60,8 @@ namespace ShopGame.Dialogue.Runtime
 
             return new DialogueResolutionResult(
                 bestMatch.DialogueId,
-                bestMatch.ConsumeKnowledge);
+                bestMatch.ConsumeKnowledge,
+                bestMatch.EndLoopOnComplete);
         }
 
         private static bool MatchesTarget(
@@ -89,6 +93,10 @@ namespace ShopGame.Dialogue.Runtime
                     return context.KnowledgeId ==
                            condition.KnowledgeId;
 
+                case DialogueKnowledgeConditionType.NotSpecific:
+                    return context.KnowledgeId !=
+                        condition.KnowledgeId;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -98,13 +106,6 @@ namespace ShopGame.Dialogue.Runtime
             DialogueData dialogueData,
             DialogueInteractionContext context)
         {
-            foreach (string progressId
-                     in dialogueData.RequiredProgressIds)
-            {
-                if (!context.GameContext.Progress.HasProgress(progressId))
-                    return false;
-            }
-
             return true;
         }
 
@@ -163,6 +164,35 @@ namespace ShopGame.Dialogue.Runtime
             }
 
             return true;
+        }
+
+        private static bool MatchesCrafting(
+    DialogueData dialogueData,
+    DialogueInteractionContext context)
+        {
+            DialogueCraftingCondition condition =
+                dialogueData.CraftingCondition;
+
+            if (condition == null)
+                return false;
+
+            switch (condition.Type)
+            {
+                case DialogueCraftingConditionType.None:
+                    return true;
+
+                case DialogueCraftingConditionType.SpecificItem:
+                    return context.IsCraftingContext &&
+                           context.CraftedItemId ==
+                           condition.ItemId;
+
+                case DialogueCraftingConditionType.NoRecognizedRecipe:
+                    return context.IsCraftingContext &&
+                           context.CraftedItemId == null;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

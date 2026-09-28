@@ -1,6 +1,7 @@
 using ShopGame.Adventure.Runtime;
 using ShopGame.Browser.Runtime;
 using ShopGame.Dialogue.Runtime;
+using ShopGame.Event.Runtime;
 using ShopGame.Interaction.Runtime;
 using ShopGame.Loop;
 using ShopGame.Manual.Runtime;
@@ -23,6 +24,10 @@ namespace ShopGame.Core.Context
         public WorldState World { get; }
 
         public LoopManager Loop { get; }
+
+        public LoopTimer LoopTimer { get; }
+
+        public LoopEndController LoopEnd { get; }
 
         public RoomManager Rooms { get; }
 
@@ -54,12 +59,24 @@ namespace ShopGame.Core.Context
 
         public CraftingStation CraftingStation { get; }
 
+        public bool IsCraftingContext { get; }
+
+        public string CraftedItemId { get; }
+
+        public CraftingStationInteractionController CraftingStationInteraction { get; }
+
+        public OwnerInteractionController OwnerInteraction { get; }
+
+        public RuleInteractionController RuleInteraction { get; }
+
         public GameContext(
             GameEventBus eventBus,
             KnowledgeState knowledge,
             GameProgress progress,
             WorldState world,
             LoopManager loop,
+            LoopTimer loopTimer,
+            LoopEndController loopEnd,
             RoomManager rooms,
             RoomAccessChecker roomAccess,
             RoomNavigationController navigation,
@@ -74,13 +91,17 @@ namespace ShopGame.Core.Context
             BrowserManager browser,
             ManualLinkInteractionController manualLinks,
             ManualSearchManager manualSearch,
-            CraftingStation craftingStation)
+            CraftingStation craftingStation,
+            CraftingStationInteractionController craftingStationInteraction,
+            RuleInteractionController ruleInteraction)
         {
             EventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
             Knowledge = knowledge ?? throw new ArgumentNullException(nameof(knowledge));
             Progress = progress ?? throw new ArgumentNullException(nameof(progress));
             World = world ?? throw new ArgumentNullException(nameof(world));
             Loop = loop ?? throw new ArgumentNullException(nameof(loop));
+            LoopTimer = loopTimer ?? throw new ArgumentNullException(nameof(loopTimer));
+            LoopEnd = loopEnd ?? throw new ArgumentNullException(nameof(loopEnd));
             Rooms = rooms ?? throw new ArgumentNullException(nameof(rooms));
             RoomAccess = roomAccess ?? throw new ArgumentNullException(nameof(roomAccess));
             Navigation = navigation ?? throw new ArgumentNullException(nameof(navigation));
@@ -96,6 +117,8 @@ namespace ShopGame.Core.Context
             ManualLinks = manualLinks ?? throw new ArgumentNullException(nameof(manualLinks));
             ManualSearch = manualSearch ?? throw new ArgumentNullException(nameof(manualSearch));
             CraftingStation = craftingStation ?? throw new ArgumentNullException(nameof(craftingStation));
+            CraftingStationInteraction = craftingStationInteraction ?? throw new ArgumentNullException(nameof(craftingStationInteraction));
+            RuleInteraction = ruleInteraction ?? throw new ArgumentNullException(nameof(ruleInteraction));
         }
     }
 }

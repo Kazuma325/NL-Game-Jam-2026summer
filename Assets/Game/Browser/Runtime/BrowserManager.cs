@@ -45,7 +45,7 @@ namespace ShopGame.Browser.Runtime
             BrowserTab explanationTab =
                 new BrowserTab(
                     nextTabId++,
-                    "explanation",
+                    "controls",
                     false);
 
             tabs.Add(searchTab);

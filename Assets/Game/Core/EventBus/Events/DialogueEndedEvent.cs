@@ -4,9 +4,14 @@ namespace ShopGame.Core.EventBus
     {
         public string DialogueId { get; }
 
-        public DialogueEndedEvent(string dialogueId)
+        public bool EndLoopOnComplete { get; }
+
+        public DialogueEndedEvent(
+            string dialogueId,
+            bool endLoopOnComplete)
         {
             DialogueId = dialogueId;
+            EndLoopOnComplete = endLoopOnComplete;
         }
     }
 }

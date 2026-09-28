@@ -1,10 +1,12 @@
 using System;
+using ShopGame.Core.EventBus;
 
 namespace ShopGame.State.World
 {
     public sealed class WorldState
     {
         private readonly string initialRoomId;
+        private readonly EventBus eventBus;
 
         public string CurrentRoomId { get; private set; }
 
@@ -14,15 +16,19 @@ namespace ShopGame.State.World
 
         public EventState Events { get; }
 
-        public WorldState(string initialRoomId)
+        public OwnerState Owner { get; }
+
+        public WorldState(string initialRoomId, EventBus eventBus)
         {
             ValidateRoomId(initialRoomId);
 
             this.initialRoomId = initialRoomId;
+            this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
             CurrentRoomId = initialRoomId;
             Bomb = new BombState();
-            Customers = new CustomerState();
+            Customers = new CustomerState(eventBus);
             Events = new EventState();
+            Owner = new OwnerState(eventBus);
         }
 
         public void SetCurrentRoom(string roomId)
@@ -37,6 +43,7 @@ namespace ShopGame.State.World
             Bomb.Reset();
             Customers.Reset();
             Events.Reset();
+            Owner.Reset();
         }
 
         private static void ValidateRoomId(string roomId)

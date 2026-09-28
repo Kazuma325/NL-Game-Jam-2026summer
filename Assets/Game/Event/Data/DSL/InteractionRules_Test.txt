@@ -1,0 +1,12 @@
+rule customer_core
+trigger interaction customer
+priority 100
+
+conditions all
+    customer present true
+    slot equals coreattachments
+end
+
+effects
+    dialogue customer_core
+end

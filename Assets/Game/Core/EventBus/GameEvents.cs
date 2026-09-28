@@ -52,6 +52,26 @@ namespace ShopGame.Core.EventBus
         }
     }
 
+    public readonly struct LoopEventTriggeredEvent
+    {
+        public string EventId { get; }
+
+        public LoopEventTriggeredEvent(string eventId)
+        {
+            EventId = eventId;
+        }
+    }
+
+    public readonly struct OwnerStateChangedEvent
+    {
+        public bool IsPresent { get; }
+
+        public OwnerStateChangedEvent(bool isPresent)
+        {
+            IsPresent = isPresent;
+        }
+    }
+
     public readonly struct GameOverEvent
     {
         public string ReasonId { get; }
@@ -68,5 +88,18 @@ namespace ShopGame.Core.EventBus
 
     public readonly struct KnowledgeSlotChangedEvent
     {
+    }
+
+    namespace ShopGame.Core.EventBus
+    {
+        public readonly struct CustomerStateChangedEvent
+        {
+            public bool IsPresent { get; }
+
+            public CustomerStateChangedEvent(bool isPresent)
+            {
+                IsPresent = isPresent;
+            }
+        }
     }
 }

@@ -1,0 +1,9 @@
+id: banned
+title: 名称未設定
+keywords: 電話番号、パスワード
+[blank]
+[note]
+このページは空白です
+編集してください
+powered by moomoo
+[/note]

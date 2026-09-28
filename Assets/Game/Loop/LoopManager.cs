@@ -38,13 +38,18 @@ namespace ShopGame.Loop
                 return;
             }
 
-            eventBus.Publish(new LoopEndedEvent(LoopCount));
             IsLoopActive = false;
+
+            eventBus.Publish(new LoopEndedEvent(LoopCount));
         }
 
         public void RestartLoop()
         {
-            EndLoop();
+            if (IsLoopActive)
+            {
+                EndLoop();
+            }
+
             worldState.Reset();
             StartLoop();
         }

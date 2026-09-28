@@ -34,7 +34,7 @@ namespace ShopGame.Adventure.Runtime
                     return knowledgeState.HasKnowledge(requirement.RequirementId);
 
                 case RoomAccessRequirementType.Progress:
-                    return gameProgress.HasProgress(requirement.RequirementId);
+                    return true;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(requirement), requirement.Type, "Unsupported room access requirement type.");

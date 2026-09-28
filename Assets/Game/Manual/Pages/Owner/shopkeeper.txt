@@ -1,0 +1,20 @@
+id: shopkeeper
+title: ウィリアム・カーター
+keywords: ウィリアム、カーター、ウィリアム・カーター
+
+#ウィリアム・カーター
+[blank]
+##プロフィール
+[blank]
+[image: ownerphoto.png]
+名前：ウィリアム・カーター
+年齢：47
+性別：男性
+職業：[修理屋|shop]の店長
+[blank]
+---
+[blank]
+##諸情報
+[blank]
+電話番号：[[054256|phonenumber]]
+車ナンバー：[[f0018|carnumber]]

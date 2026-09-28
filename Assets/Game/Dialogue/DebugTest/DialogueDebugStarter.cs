@@ -25,10 +25,31 @@ namespace ShopGame.Dialogue.View
                     "Dialogue ID is not assigned.");
             }
 
-            var resolutionResult =
-                new DialogueResolutionResult(
-                    dialogueId,
-                    false);
+            gameBootstrap.Context.KnowledgeSelection.SelectOrToggle(
+                "pass5",
+                "Pass5");
+
+            var interactionContext =
+                new DialogueInteractionContext(
+                    "test_target",
+                    gameBootstrap.Context.KnowledgeSlot.SelectedKnowledgeId,
+                    gameBootstrap.Context.KnowledgeSlot.SelectedKnowledgeDisplayName,
+                    gameBootstrap.Context);
+
+            DialogueResolutionResult resolutionResult =
+                gameBootstrap.Context.DialogueResolver.Resolve(
+                    interactionContext);
+
+            if (resolutionResult == null)
+            {
+                Debug.Log(
+                    "No matching dialogue was found.");
+
+                return;
+            }
+
+            Debug.Log(
+                $"Resolved dialogue: {resolutionResult.DialogueId}");
 
             bool started =
                 gameBootstrap.Context.DialogueManager.StartDialogue(
@@ -37,7 +58,7 @@ namespace ShopGame.Dialogue.View
             if (!started)
             {
                 Debug.LogError(
-                    $"Failed to start dialogue '{dialogueId}'.");
+                    $"Failed to start dialogue '{resolutionResult.DialogueId}'.");
             }
         }
 

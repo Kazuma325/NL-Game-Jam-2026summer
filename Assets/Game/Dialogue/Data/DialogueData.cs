@@ -35,6 +35,10 @@ namespace ShopGame.Dialogue.Data
         [SerializeField]
         private int maximumLoopCount = -1;
 
+        [Header("Crafting")]
+        [SerializeField]
+        private DialogueCraftingCondition craftingCondition = new DialogueCraftingCondition();
+
         [Header("World")]
         [SerializeField]
         private string requiredRoomId;
@@ -49,6 +53,9 @@ namespace ShopGame.Dialogue.Data
         [Header("Result")]
         [SerializeField]
         private bool consumeKnowledge;
+
+        [SerializeField]
+        private bool endLoopOnComplete;
 
         public string DialogueId => dialogueId;
 
@@ -66,6 +73,9 @@ namespace ShopGame.Dialogue.Data
 
         public int MaximumLoopCount => maximumLoopCount;
 
+        public DialogueCraftingCondition CraftingCondition =>
+            craftingCondition;
+
         public string RequiredRoomId => requiredRoomId;
 
         public string RequiredDeviceStatus =>
@@ -75,5 +85,7 @@ namespace ShopGame.Dialogue.Data
             requiredActiveEventIds;
 
         public bool ConsumeKnowledge => consumeKnowledge;
+
+        public bool EndLoopOnComplete => endLoopOnComplete;
     }
 }

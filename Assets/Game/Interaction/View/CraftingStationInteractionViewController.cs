@@ -11,19 +11,18 @@ namespace ShopGame.Interaction.View
         [SerializeField]
         private Button interactionButton;
 
-        private KnowledgeInteractionController knowledgeInteractionController;
-        private CraftingStation craftingStation;
+        private GameContext gameContext;
+        private CraftingStationInteractionController interactionController;
 
         public void Initialize(GameContext context)
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            knowledgeInteractionController =
-                context.KnowledgeInteraction;
+            gameContext = context;
 
-            craftingStation =
-                context.CraftingStation;
+            interactionController =
+                context.CraftingStationInteraction;
 
             interactionButton.onClick.AddListener(
                 HandleInteractionClicked);
@@ -31,13 +30,9 @@ namespace ShopGame.Interaction.View
 
         private void HandleInteractionClicked()
         {
-            KnowledgeUseResult result =
-                knowledgeInteractionController
-                    .TryUseKnowledgeOnCraftingStation(
-                        craftingStation);
-
-            Debug.Log(
-                $"CraftingStation interaction result: {result}");
+            interactionController.Interact(
+                "blender",
+                gameContext);
         }
 
         private void OnDestroy()

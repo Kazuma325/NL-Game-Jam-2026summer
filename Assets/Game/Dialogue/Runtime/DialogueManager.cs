@@ -12,6 +12,7 @@ namespace ShopGame.Dialogue.Runtime
         private readonly DialogueLog log;
 
         private bool isPaused;
+        private bool currentDialogueEndsLoop;
 
         public bool IsPlaying =>
             playback.IsPlaying;
@@ -98,6 +99,9 @@ namespace ShopGame.Dialogue.Runtime
             if (!started)
                 return false;
 
+            currentDialogueEndsLoop =
+                resolutionResult.EndLoopOnComplete;
+
             typewriter.Reset();
 
             isPaused = false;
@@ -114,6 +118,44 @@ namespace ShopGame.Dialogue.Runtime
             eventBus.Publish(
                 new DialogueStartedEvent(
                     resolutionResult.DialogueId));
+
+            return true;
+        }
+
+        public bool StartDialogue(string dialogueId)
+        {
+            if (string.IsNullOrWhiteSpace(dialogueId))
+            {
+                throw new ArgumentException(
+                    "Dialogue ID must not be null, empty, or whitespace.",
+                    nameof(dialogueId));
+            }
+
+            if (IsPlaying)
+                return false;
+
+            bool started =
+                playback.Start(dialogueId);
+
+            if (!started)
+                return false;
+
+            typewriter.Reset();
+
+            isPaused = false;
+
+            log.Clear();
+
+            DialogueLine currentLine =
+                CurrentLine;
+
+            log.Add(
+                currentLine.SpeakerName,
+                string.Empty);
+
+            eventBus.Publish(
+                new DialogueStartedEvent(
+                    dialogueId));
 
             return true;
         }
@@ -194,19 +236,19 @@ namespace ShopGame.Dialogue.Runtime
 
         public void EndDialogue()
         {
-            if (!IsPlaying)
-                return;
+            if (!IsPlaying) return;
 
-            string dialogueId =
-                CurrentDialogueId;
+            string dialogueId = CurrentDialogueId;
+            bool endLoopOnComplete = currentDialogueEndsLoop;
 
             playback.Stop();
-
             isPaused = false;
+            currentDialogueEndsLoop = false;
 
             eventBus.Publish(
                 new DialogueEndedEvent(
-                    dialogueId));
+                    dialogueId,
+                    endLoopOnComplete));
         }
 
         public void SetSpeed(DialogueSpeed speed)
