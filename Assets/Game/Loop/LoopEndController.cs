@@ -1,5 +1,6 @@
-using System;
 using ShopGame.Core.EventBus;
+using ShopGame.State.Progress;
+using System;
 
 namespace ShopGame.Loop
 {
@@ -7,6 +8,7 @@ namespace ShopGame.Loop
     {
         private readonly LoopManager loopManager;
         private readonly LoopTimer loopTimer;
+        private readonly GameProgress progress;
         private readonly EventBus eventBus;
 
         private bool isDialogueActive;
@@ -19,6 +21,7 @@ namespace ShopGame.Loop
         public LoopEndController(
             LoopManager loopManager,
             LoopTimer loopTimer,
+            GameProgress progress,
             EventBus eventBus)
         {
             this.loopManager =
@@ -30,6 +33,10 @@ namespace ShopGame.Loop
                 loopTimer
                 ?? throw new ArgumentNullException(
                     nameof(loopTimer));
+
+            this.progress =
+    progress
+    ?? throw new ArgumentNullException(nameof(progress));
 
             this.eventBus =
                 eventBus
@@ -48,17 +55,15 @@ namespace ShopGame.Loop
         public void Update()
         {
             if (!loopManager.IsLoopActive)
-            {
                 return;
-            }
+
+            if (progress.CurrentProgress == 0)
+                return;
 
             if (!loopTimer.IsTimeLimitReached)
-            {
                 return;
-            }
 
-            RequestEnd(
-                LoopEndReason.TimeLimit);
+            RequestEnd(LoopEndReason.TimeLimit);
         }
 
         public void RequestEnd(

@@ -16,6 +16,11 @@ namespace ShopGame.Loop
         private const string CustomerDialogueId =
             "customer";
 
+        private const float DialogueTransitionDelaySeconds = 0.2f;
+
+        private float dialogueTransitionTimer;
+        private bool isWaitingForDialogueTransition;
+
         private readonly OwnerState ownerState;
         private readonly CustomerState customerState;
         private readonly DialogueManager dialogueManager;
@@ -58,6 +63,40 @@ namespace ShopGame.Loop
                 OnDialogueEnded);
         }
 
+        public void Update(float deltaTime)
+        {
+            if (string.IsNullOrWhiteSpace(pendingDialogueId))
+            {
+                return;
+            }
+
+            if (dialogueManager.IsPlaying)
+            {
+                return;
+            }
+
+            if (!isWaitingForDialogueTransition)
+            {
+                isWaitingForDialogueTransition = true;
+                dialogueTransitionTimer = DialogueTransitionDelaySeconds;
+                return;
+            }
+
+            dialogueTransitionTimer -= deltaTime;
+
+            if (dialogueTransitionTimer > 0f)
+            {
+                return;
+            }
+
+            isWaitingForDialogueTransition = false;
+
+            string dialogueId = pendingDialogueId;
+            pendingDialogueId = null;
+
+            StartCustomerDialogue(dialogueId);
+        }
+
         public void Dispose()
         {
             eventBus.Unsubscribe<LoopEventTriggeredEvent>(
@@ -68,12 +107,15 @@ namespace ShopGame.Loop
         }
 
         private void OnLoopEventTriggered(
-            LoopEventTriggeredEvent eventData)
+    LoopEventTriggeredEvent eventData)
         {
             if (eventData.EventId != OwnerDepartureEventId)
             {
                 return;
             }
+
+            UnityEngine.Debug.Log(
+                "OwnerDepartureController: owner_departure triggered.");
 
             HandleOwnerDeparture();
         }
@@ -87,9 +129,19 @@ namespace ShopGame.Loop
                     ? FirstLoopCustomerDialogueId
                     : CustomerDialogueId;
 
+            UnityEngine.Debug.Log(
+                $"OwnerDepartureController: target dialogue = {dialogueId}");
+
+            UnityEngine.Debug.Log(
+                $"OwnerDepartureController: IsPlaying = {dialogueManager.IsPlaying}");
+
             if (dialogueManager.IsPlaying)
             {
                 pendingDialogueId = dialogueId;
+
+                UnityEngine.Debug.Log(
+                    $"OwnerDepartureController: dialogue pending = {pendingDialogueId}");
+
                 return;
             }
 
@@ -110,23 +162,13 @@ namespace ShopGame.Loop
         }
 
         private void OnDialogueEnded(
-            DialogueEndedEvent eventData)
+    DialogueEndedEvent eventData)
         {
             if (eventData.DialogueId == CustomerDialogueId ||
                 eventData.DialogueId == FirstLoopCustomerDialogueId)
             {
                 customerState.Appear();
             }
-
-            if (string.IsNullOrWhiteSpace(pendingDialogueId))
-            {
-                return;
-            }
-
-            string dialogueId = pendingDialogueId;
-            pendingDialogueId = null;
-
-            StartCustomerDialogue(dialogueId);
         }
     }
 }

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77744bc4de7426547ba37a5b4c3957ef, type: 3}
-  m_Name: DialogueData_BlenderCore
+  m_Name: DialogueData_BlenderJoint
   m_EditorClassIdentifier: Assembly-CSharp::ShopGame.Dialogue.Data.DialogueData
-  dialogueId: blender_core
+  dialogueId: blender_customer1
   targetId: blender
-  priority: 100
+  priority: 300
   knowledgeCondition:
     Type: 0
     KnowledgeId: 
@@ -23,10 +23,10 @@ MonoBehaviour:
   maximumLoopCount: -1
   craftingCondition:
     Type: 1
-    ItemId: correctcore
+    ItemId: correctjoint
   requiredRoomId: 
   requiredDeviceStatus: 
   requiredActiveEventIds:
   - owner_departure
   consumeKnowledge: 0
-  endLoopOnComplete: 0
+  endLoopOnComplete: 1

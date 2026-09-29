@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 77744bc4de7426547ba37a5b4c3957ef, type: 3}
-  m_Name: DialogueData_BlenderCore
+  m_Name: Dialogue_ManualCarNumber
   m_EditorClassIdentifier: Assembly-CSharp::ShopGame.Dialogue.Data.DialogueData
-  dialogueId: blender_core
-  targetId: blender
+  dialogueId: manual_carnum
+  targetId: manual
   priority: 100
   knowledgeCondition:
-    Type: 0
-    KnowledgeId: 
+    Type: 2
+    KnowledgeId: carnumber
   requiredProgressIds: []
   minimumLoopCount: 0
   maximumLoopCount: -1
   craftingCondition:
-    Type: 1
-    ItemId: correctcore
+    Type: 0
+    ItemId: 
   requiredRoomId: 
   requiredDeviceStatus: 
   requiredActiveEventIds:

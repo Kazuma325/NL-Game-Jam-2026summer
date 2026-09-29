@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: LoopEvent_OwnerDeparture
   m_EditorClassIdentifier: Assembly-CSharp::ShopGame.Loop.Data.LoopEventData
   eventId: owner_departure
-  triggerTimeSeconds: 30
+  triggerTimeSeconds: 40

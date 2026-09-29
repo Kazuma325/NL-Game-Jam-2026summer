@@ -18,6 +18,7 @@ using ShopGame.Manual.Runtime;
 using ShopGame.State.Knowledge;
 using ShopGame.State.Progress;
 using ShopGame.State.World;
+using ShopGame.Title.Runtime;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -135,7 +136,7 @@ namespace ShopGame.Core.Bootstrap
             var loop = new LoopManager(world, eventBus);
             var loopTimer = new LoopTimer(loopTimeLimitSeconds);
             loopEventScheduler = new LoopEventScheduler(world, eventBus, loopEventData);
-            var loopEnd = new LoopEndController(loop, loopTimer, eventBus);
+            var loopEnd = new LoopEndController(loop, loopTimer, progress, eventBus);
             var roomAccess = new RoomAccessChecker(knowledge, progress);
             var rooms = new RoomManager(world, eventBus, roomData, roomAccess);
             ownerViewPresenter.Initialize(world.Owner, eventBus);
@@ -153,7 +154,10 @@ namespace ShopGame.Core.Bootstrap
             }
             var dialogueRepository = new DialogueRepository(dialogueLines);
             var dialoguePlayback = new DialoguePlayback(dialogueRepository);
+            var settings = SettingsState.Load();
             var dialogueTypewriter = new DialogueTypewriter(DialogueSpeed.Normal);
+            dialogueTypewriter.SetSpeedMultiplier(
+    settings.DialogueSpeed);
             var dialogueLog = new DialogueLog();
             var dialogueResolver = new DialogueResolver(dialogueData);
             var dialogueInteraction = new DialogueInteractionController(knowledgeSlot, dialogueResolver);
@@ -251,6 +255,10 @@ namespace ShopGame.Core.Bootstrap
             loopEventScheduler.Update(Context.LoopTimer.ElapsedSeconds);
 
             Context.LoopEnd.Update();
+
+            ownerDepartureController.Update(Time.deltaTime);
+
+            loopRestart.Update();
         }
 
         private void OnLoopStarted(

@@ -49,6 +49,8 @@ namespace ShopGame.Interaction.Runtime
 
         public bool AddMaterial(string materialId)
         {
+            UnityEngine.Debug.Log(
+                $"CraftingStation: AddMaterial('{materialId}')");
             ValidateMaterialId(materialId);
 
             bool added =
@@ -77,6 +79,9 @@ namespace ShopGame.Interaction.Runtime
                     "Display name must not be null, empty, or whitespace.",
                     nameof(displayName));
             }
+
+            UnityEngine.Debug.Log(
+                $"CraftingStation: AddMaterial('{materialId}')");
 
             bool added =
                 insertedMaterialIds.Add(materialId);

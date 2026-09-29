@@ -49,11 +49,22 @@ namespace ShopGame.Dialogue.Runtime
         }
 
         private void OnItemCrafted(
-            ItemCraftedEvent eventData)
+    ItemCraftedEvent eventData)
         {
-            recipeMatcher.TryMatch(
-                eventData.MaterialIds,
-                out string itemId);
+            bool matched =
+                recipeMatcher.TryMatch(
+                    eventData.MaterialIds,
+                    out string itemId);
+
+            UnityEngine.Debug.Log(
+                $"CraftingDialogueTrigger: matched={matched}, itemId={itemId}");
+
+            UnityEngine.Debug.Log(
+                $"CraftingDialogueTrigger: targetId={targetId}");
+
+            UnityEngine.Debug.Log(
+                $"CraftingDialogueTrigger: owner_departure active=" +
+                gameContext.World.Events.IsActive("owner_departure"));
 
             var context =
                 new DialogueInteractionContext(
@@ -61,12 +72,20 @@ namespace ShopGame.Dialogue.Runtime
                     itemId,
                     gameContext);
 
+            UnityEngine.Debug.Log(
+                $"CraftingDialogueTrigger: IsCraftingContext={context.IsCraftingContext}, " +
+                $"CraftedItemId={context.CraftedItemId}");
+
             DialogueResolutionResult resolutionResult =
-                gameContext.DialogueResolver.Resolve(
-                    context);
+    gameContext.DialogueResolver.Resolve(context);
 
             if (resolutionResult == null)
                 return;
+
+            UnityEngine.Debug.Log(
+                $"CraftingDialogueTrigger: " +
+                $"Resolved dialogue={resolutionResult.DialogueId}, " +
+                $"EndLoopOnComplete={resolutionResult.EndLoopOnComplete}");
 
             gameContext.DialogueManager.StartDialogue(
                 resolutionResult);

@@ -36,15 +36,19 @@ namespace ShopGame.Dialogue.View
             dialogueCanvas.SetActive(false);
         }
 
-        private void OnDialogueStarted(
-            DialogueStartedEvent eventData)
+        private void OnDialogueStarted(DialogueStartedEvent eventData)
         {
+            UnityEngine.Debug.Log(
+                $"DialogueCanvasController: DialogueStarted '{eventData.DialogueId}'");
+
             dialogueCanvas.SetActive(true);
         }
 
-        private void OnDialogueEnded(
-            DialogueEndedEvent eventData)
+        private void OnDialogueEnded(DialogueEndedEvent eventData)
         {
+            UnityEngine.Debug.Log(
+                $"DialogueCanvasController: DialogueEnded '{eventData.DialogueId}'");
+
             dialogueCanvas.SetActive(false);
         }
 

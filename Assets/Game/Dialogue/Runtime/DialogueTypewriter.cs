@@ -20,7 +20,7 @@ namespace ShopGame.Dialogue.Runtime
             Speed = speed;
 
             charactersPerSecond =
-                GetCharactersPerSecond(speed);
+    GetCharactersPerSecond(speed) * speedMultiplier;
 
             elapsedTime = 0f;
         }
@@ -111,6 +111,26 @@ namespace ShopGame.Dialogue.Runtime
                         speed,
                         "Unknown dialogue speed.");
             }
+        }
+
+        private float speedMultiplier = 1f;
+
+        public void SetSpeedMultiplier(float multiplier)
+        {
+            if (multiplier <= 0f)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(multiplier),
+                    multiplier,
+                    "Speed multiplier must be greater than zero.");
+            }
+
+            speedMultiplier = multiplier;
+
+            charactersPerSecond =
+                GetCharactersPerSecond(Speed);
+
+            elapsedTime = 0f;
         }
     }
 }

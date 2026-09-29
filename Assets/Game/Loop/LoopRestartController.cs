@@ -8,6 +8,8 @@ namespace ShopGame.Loop
         private readonly LoopManager loopManager;
         private readonly EventBus eventBus;
 
+        private bool restartPending;
+
         public LoopRestartController(
             LoopManager loopManager,
             EventBus eventBus)
@@ -26,6 +28,15 @@ namespace ShopGame.Loop
                 OnLoopEnded);
         }
 
+        public void Update()
+        {
+            if (!restartPending)
+                return;
+
+            restartPending = false;
+            loopManager.RestartLoop();
+        }
+
         public void Dispose()
         {
             eventBus.Unsubscribe<LoopEndedEvent>(
@@ -33,9 +44,9 @@ namespace ShopGame.Loop
         }
 
         private void OnLoopEnded(
-            LoopEndedEvent eventData)
+    LoopEndedEvent eventData)
         {
-            loopManager.RestartLoop();
+            restartPending = true;
         }
     }
 }

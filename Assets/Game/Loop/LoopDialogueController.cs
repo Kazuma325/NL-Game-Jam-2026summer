@@ -7,8 +7,9 @@ namespace ShopGame.Loop
 {
     public sealed class LoopDialogueController
     {
-        private const string BeginningDialogueId =
-            "beginning";
+        private const string BeginningDialogueId = "beginning";
+
+        private string loopStartDialogueId;
 
         private readonly GameProgress progress;
         private readonly DialogueManager dialogueManager;
@@ -70,34 +71,49 @@ namespace ShopGame.Loop
             }
         }
 
-        private void OnLoopStarted(
-            LoopStartedEvent eventData)
+        private void OnLoopStarted(LoopStartedEvent eventData)
         {
             if (eventData.LoopCount == 1)
-            {
                 return;
-            }
 
             string dialogueId =
                 $"loop{progress.CurrentProgress}";
+
+            loopStartDialogueId = dialogueId;
+
+            loopTimer.Stop();
+
+            UnityEngine.Debug.Log(
+                $"LoopDialogueController: Starting dialogue '{dialogueId}'");
 
             bool started =
                 dialogueManager.StartDialogue(dialogueId);
 
             if (!started)
             {
+                loopStartDialogueId = null;
+                loopTimer.Start();
+
                 throw new InvalidOperationException(
                     $"Failed to start loop dialogue '{dialogueId}'.");
             }
         }
 
-        private void OnDialogueEnded(
-            DialogueEndedEvent eventData)
+        private void OnDialogueEnded(DialogueEndedEvent eventData)
         {
-            if (eventData.DialogueId != BeginningDialogueId)
+            if (eventData.DialogueId == BeginningDialogueId)
             {
+                loopTimer.Start();
                 return;
             }
+
+            if (eventData.DialogueId != loopStartDialogueId)
+                return;
+
+            loopStartDialogueId = null;
+
+            if (eventData.EndLoopOnComplete)
+                return;
 
             loopTimer.Start();
         }

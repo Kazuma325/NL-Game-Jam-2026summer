@@ -26,5 +26,7 @@ MonoBehaviour:
     ItemId: 
   requiredRoomId: 
   requiredDeviceStatus: 
-  requiredActiveEventIds: []
+  requiredActiveEventIds:
+  - owner_departure
   consumeKnowledge: 0
+  endLoopOnComplete: 0
