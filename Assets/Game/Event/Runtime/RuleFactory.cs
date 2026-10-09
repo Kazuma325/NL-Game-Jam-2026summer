@@ -51,9 +51,8 @@ namespace ShopGame.Event.Runtime
                         effectData));
             }
 
-            InteractionTrigger trigger =
-                new InteractionTrigger(
-                    data.TargetId);
+            ITrigger trigger =
+                CreateTrigger(data.Trigger);
 
             return new Rule(
                 data.RuleId,
@@ -61,6 +60,26 @@ namespace ShopGame.Event.Runtime
                 condition,
                 data.Priority,
                 effects);
+        }
+
+        private ITrigger CreateTrigger(TriggerData data)
+        {
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            return data.Type switch
+            {
+                TriggerType.Interaction =>
+                    new InteractionTrigger(data.Id),
+
+                TriggerType.Crafting =>
+                    new CraftingTrigger(data.Id),
+
+                _ => throw new InvalidOperationException(
+                    $"Unsupported trigger type: {data.Type}")
+            };
         }
 
         public IReadOnlyList<Rule> CreateAll(

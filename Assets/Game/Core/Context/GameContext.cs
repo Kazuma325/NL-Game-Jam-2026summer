@@ -67,7 +67,7 @@ namespace ShopGame.Core.Context
 
         public OwnerInteractionController OwnerInteraction { get; }
 
-        public RuleInteractionController RuleInteraction { get; }
+        public RuleTriggerController RuleTrigger { get; }
 
         public GameContext(
             GameEventBus eventBus,
@@ -93,7 +93,7 @@ namespace ShopGame.Core.Context
             ManualSearchManager manualSearch,
             CraftingStation craftingStation,
             CraftingStationInteractionController craftingStationInteraction,
-            RuleInteractionController ruleInteraction)
+            RuleTriggerController ruleTrigger)
         {
             EventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
             Knowledge = knowledge ?? throw new ArgumentNullException(nameof(knowledge));
@@ -118,7 +118,7 @@ namespace ShopGame.Core.Context
             ManualSearch = manualSearch ?? throw new ArgumentNullException(nameof(manualSearch));
             CraftingStation = craftingStation ?? throw new ArgumentNullException(nameof(craftingStation));
             CraftingStationInteraction = craftingStationInteraction ?? throw new ArgumentNullException(nameof(craftingStationInteraction));
-            RuleInteraction = ruleInteraction ?? throw new ArgumentNullException(nameof(ruleInteraction));
+            RuleTrigger = ruleTrigger ?? throw new ArgumentNullException(nameof(ruleTrigger));
         }
     }
 }

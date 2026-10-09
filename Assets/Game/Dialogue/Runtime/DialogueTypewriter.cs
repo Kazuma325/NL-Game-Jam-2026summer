@@ -9,8 +9,7 @@ namespace ShopGame.Dialogue.Runtime
 
         public DialogueSpeed Speed { get; private set; }
 
-        public DialogueTypewriter(
-            DialogueSpeed initialSpeed)
+        public DialogueTypewriter(DialogueSpeed initialSpeed)
         {
             SetSpeed(initialSpeed);
         }
@@ -19,27 +18,18 @@ namespace ShopGame.Dialogue.Runtime
         {
             Speed = speed;
 
-            charactersPerSecond =
-    GetCharactersPerSecond(speed) * speedMultiplier;
+            charactersPerSecond = GetCharactersPerSecond(speed);
 
             elapsedTime = 0f;
         }
 
-        public bool Update(
-            float deltaTime,
-            DialogueManager dialogueManager)
+        public bool Update(float deltaTime, DialogueManager dialogueManager)
         {
-            if (dialogueManager == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(dialogueManager));
-            }
+            if (dialogueManager == null) throw new ArgumentNullException(nameof(dialogueManager));
 
-            if (!dialogueManager.IsPlaying)
-                return false;
+            if (!dialogueManager.IsPlaying) return false;
 
-            if (dialogueManager.CurrentLine == null)
-                return false;
+            if (dialogueManager.CurrentLine == null) return false;
 
             if (Speed == DialogueSpeed.Instant)
             {
@@ -60,8 +50,7 @@ namespace ShopGame.Dialogue.Runtime
 
             elapsedTime += deltaTime;
 
-            float secondsPerCharacter =
-                1f / charactersPerSecond;
+            float secondsPerCharacter = 1f / charactersPerSecond;
 
             bool advanced = false;
 
@@ -111,26 +100,6 @@ namespace ShopGame.Dialogue.Runtime
                         speed,
                         "Unknown dialogue speed.");
             }
-        }
-
-        private float speedMultiplier = 1f;
-
-        public void SetSpeedMultiplier(float multiplier)
-        {
-            if (multiplier <= 0f)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(multiplier),
-                    multiplier,
-                    "Speed multiplier must be greater than zero.");
-            }
-
-            speedMultiplier = multiplier;
-
-            charactersPerSecond =
-                GetCharactersPerSecond(Speed);
-
-            elapsedTime = 0f;
         }
     }
 }

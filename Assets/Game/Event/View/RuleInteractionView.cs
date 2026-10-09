@@ -15,7 +15,7 @@ namespace ShopGame.Event.View
         private string targetId;
 
         private GameContext gameContext;
-        private RuleInteractionController interactionController;
+        private RuleTriggerController ruleTriggerController;
 
         public void Initialize(GameContext context)
         {
@@ -38,8 +38,8 @@ namespace ShopGame.Event.View
             }
 
             gameContext = context;
-            interactionController =
-                context.RuleInteraction;
+            ruleTriggerController =
+                context.RuleTrigger;
 
             interactionButton.onClick.AddListener(
                 HandleInteractionClicked);
@@ -47,8 +47,12 @@ namespace ShopGame.Event.View
 
         private void HandleInteractionClicked()
         {
-            interactionController.TryInteract(
-                targetId,
+            InteractionTrigger trigger =
+                new InteractionTrigger(
+                    targetId);
+
+            ruleTriggerController.TryTrigger(
+                trigger,
                 gameContext);
         }
 

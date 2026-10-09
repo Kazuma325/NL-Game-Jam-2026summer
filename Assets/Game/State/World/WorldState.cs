@@ -1,9 +1,10 @@
 using System;
 using ShopGame.Core.EventBus;
+using ShopGame.Loop;
 
 namespace ShopGame.State.World
 {
-    public sealed class WorldState
+    public sealed class WorldState : ILoopResettable
     {
         private readonly string initialRoomId;
         private readonly EventBus eventBus;
@@ -37,13 +38,23 @@ namespace ShopGame.State.World
             CurrentRoomId = roomId;
         }
 
-        public void Reset()
+        public void ResetForLoop()
         {
+            string previousRoomId = CurrentRoomId;
+
             CurrentRoomId = initialRoomId;
             Bomb.Reset();
             Customers.Reset();
             Events.Reset();
             Owner.Reset();
+
+            if (previousRoomId != CurrentRoomId)
+            {
+                eventBus.Publish(
+                    new RoomChangedEvent(
+                        previousRoomId,
+                        CurrentRoomId));
+            }
         }
 
         private static void ValidateRoomId(string roomId)

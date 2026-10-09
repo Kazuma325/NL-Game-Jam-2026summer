@@ -6,14 +6,14 @@ namespace ShopGame.Event.Runtime
     public sealed class Rule
     {
         public string RuleId { get; }
-        public InteractionTrigger Trigger { get; }
+        public ITrigger Trigger { get; }
         public ICondition Condition { get; }
         public int Priority { get; }
         public IReadOnlyList<IEffect> Effects { get; }
 
         public Rule(
             string ruleId,
-            InteractionTrigger trigger,
+            ITrigger trigger,
             ICondition condition,
             int priority,
             IReadOnlyList<IEffect> effects)

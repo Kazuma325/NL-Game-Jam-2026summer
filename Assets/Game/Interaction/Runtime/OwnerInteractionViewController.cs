@@ -13,7 +13,7 @@ namespace ShopGame.Interaction.View
         private Button interactionButton;
 
         private GameContext gameContext;
-        private RuleInteractionController interactionController;
+        private RuleTriggerController ruleTriggerController;
 
         public void Initialize(GameContext context)
         {
@@ -24,8 +24,8 @@ namespace ShopGame.Interaction.View
 
             gameContext = context;
 
-            interactionController =
-                context.RuleInteraction;
+            ruleTriggerController =
+                context.RuleTrigger;
 
             if (interactionButton == null)
             {
@@ -39,8 +39,12 @@ namespace ShopGame.Interaction.View
 
         private void HandleInteractionClicked()
         {
-            interactionController.TryInteract(
-                "owner",
+            InteractionTrigger trigger =
+                new InteractionTrigger(
+                    "owner");
+
+            ruleTriggerController.TryTrigger(
+                trigger,
                 gameContext);
         }
 

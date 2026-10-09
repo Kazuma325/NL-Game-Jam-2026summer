@@ -52,6 +52,9 @@ namespace ShopGame.Interaction.Runtime
 
             eventBus.Publish(
                 new KnowledgeSlotChangedEvent());
+
+            eventBus.Publish(
+                new KnowledgeSlotSelectionChangedEvent());
         }
 
         public void Clear()

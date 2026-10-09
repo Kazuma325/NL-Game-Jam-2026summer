@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using ShopGame.Core.EventBus;
 
 namespace ShopGame.State.Progress
@@ -28,8 +29,11 @@ namespace ShopGame.State.Progress
 
             if (targetProgress <= CurrentProgress)
             {
+                UnityEngine.Debug.Log("targetProgress is not greater than CurrentProgress.");
                 return false;
             }
+
+            UnityEngine.Debug.Log("Changed CurrentProgress.");
 
             CurrentProgress = targetProgress;
 

@@ -6,14 +6,14 @@ namespace ShopGame.Event.Data
     public sealed class RuleData
     {
         public string RuleId { get; }
-        public string TargetId { get; }
+        public TriggerData Trigger { get; }
         public int Priority { get; }
         public ConditionData Condition { get; }
         public IReadOnlyList<EffectData> Effects { get; }
 
         public RuleData(
             string ruleId,
-            string targetId,
+            TriggerData trigger,
             int priority,
             ConditionData condition,
             IReadOnlyList<EffectData> effects)
@@ -25,12 +25,8 @@ namespace ShopGame.Event.Data
                     nameof(ruleId));
             }
 
-            if (string.IsNullOrWhiteSpace(targetId))
-            {
-                throw new ArgumentException(
-                    "Target ID must not be null, empty, or whitespace.",
-                    nameof(targetId));
-            }
+            Trigger = trigger
+                ?? throw new ArgumentNullException(nameof(trigger));
 
             if (condition == null)
             {
@@ -50,7 +46,6 @@ namespace ShopGame.Event.Data
             }
 
             RuleId = ruleId;
-            TargetId = targetId;
             Priority = priority;
             Condition = condition;
             Effects = effects;

@@ -1,6 +1,7 @@
 using ShopGame.Adventure.Data;
 using ShopGame.Adventure.Runtime;
 using ShopGame.Adventure.View;
+using ShopGame.Audio.Runtime;
 using ShopGame.Browser.Runtime;
 using ShopGame.Core.Context;
 using ShopGame.Core.EventBus;
@@ -15,6 +16,9 @@ using ShopGame.Interaction.View;
 using ShopGame.Loop;
 using ShopGame.Loop.Data;
 using ShopGame.Manual.Runtime;
+using ShopGame.Sound.Data;
+using ShopGame.Sound.Runtime;
+using ShopGame.Sound.View;
 using ShopGame.State.Knowledge;
 using ShopGame.State.Progress;
 using ShopGame.State.World;
@@ -88,6 +92,12 @@ namespace ShopGame.Core.Bootstrap
         [SerializeField]
         private TextAsset[] dialogueSources = Array.Empty<TextAsset>();
 
+        [SerializeField]
+        private SoundDatabase soundDatabase;
+
+        [SerializeField]
+        private AudioSourceView audioSourceView;
+
         public GameContext Context { get; private set; }
 
         private LoopRestartController loopRestart;
@@ -100,6 +110,16 @@ namespace ShopGame.Core.Bootstrap
 
         [SerializeField]
         private DialogueBackgroundEntry[] dialogueBackgroundEntries = Array.Empty<DialogueBackgroundEntry>();
+
+        [SerializeField]
+        private SettingsController settingsController;
+
+        [SerializeField]
+        private AudioManager audioManager;
+
+        private SettingsState settingsState;
+        private BgmController bgmController;
+        private SeController seController;
 
         public DialoguePortraitRepository DialoguePortraitRepository
         {
@@ -125,15 +145,18 @@ namespace ShopGame.Core.Bootstrap
             private set;
         }
 
-        public RuleInteractionController RuleInteraction { get; }
 
         private void Awake()
         {
             var eventBus = new GameEventBus();
+            var soundManager = new SoundManager(soundDatabase, audioSourceView);
             var knowledge = new KnowledgeState(eventBus);
             var progress = new GameProgress(eventBus);
+            bgmController = new BgmController(soundManager, progress, eventBus);
+            seController =new SeController(soundManager, eventBus);
             var world = new WorldState(initialRoomId, eventBus);
-            var loop = new LoopManager(world, eventBus);
+            var craftingStation = new CraftingStation(eventBus);
+            var loop = new LoopManager(new ILoopResettable[] {world, craftingStation}, eventBus);
             var loopTimer = new LoopTimer(loopTimeLimitSeconds);
             loopEventScheduler = new LoopEventScheduler(world, eventBus, loopEventData);
             var loopEnd = new LoopEndController(loop, loopTimer, progress, eventBus);
@@ -154,10 +177,9 @@ namespace ShopGame.Core.Bootstrap
             }
             var dialogueRepository = new DialogueRepository(dialogueLines);
             var dialoguePlayback = new DialoguePlayback(dialogueRepository);
-            var settings = SettingsState.Load();
-            var dialogueTypewriter = new DialogueTypewriter(DialogueSpeed.Normal);
-            dialogueTypewriter.SetSpeedMultiplier(
-    settings.DialogueSpeed);
+            settingsState = SettingsState.Load();
+            DialogueSpeed dialogueSpeed = settingsState.GetDialogueSpeed();
+            var dialogueTypewriter = new DialogueTypewriter(dialogueSpeed);
             var dialogueLog = new DialogueLog();
             var dialogueResolver = new DialogueResolver(dialogueData);
             var dialogueInteraction = new DialogueInteractionController(knowledgeSlot, dialogueResolver);
@@ -172,20 +194,19 @@ namespace ShopGame.Core.Bootstrap
             var browserManager = new BrowserManager(eventBus);
             var manualLinkInteraction = new ManualLinkInteractionController(browserManager, knowledgeSelection);
             var manualSearch = new ManualSearchManager(manualPages);
-            var craftingStation = new CraftingStation(eventBus);
             var recipeMatcher = new RecipeMatcher(recipeData);
-            var craftResultHandler = new CraftResultHandler(eventBus, recipeMatcher);
             var craftingStationInteraction = new CraftingStationInteractionController(knowledgeInteraction, dialogueInteraction, craftingStation);
 
-            RuleParser ruleParser = new RuleParser();
+            var ruleParser = new RuleParser();
             var ruleDataList = ruleParser.Parse(interactionRulesText.text);
-            ConditionFactory conditionFactory = new ConditionFactory();
-            EffectFactory effectFactory = new EffectFactory();
-            RuleFactory ruleFactory = new RuleFactory(conditionFactory, effectFactory);
+            var conditionFactory = new ConditionFactory();
+            var effectFactory = new EffectFactory();
+            var ruleFactory = new RuleFactory(conditionFactory, effectFactory);
             var rules = ruleFactory.CreateAll(ruleDataList);
-            RuleResolver ruleResolver = new RuleResolver(rules);
-            RuleExecutor ruleExecutor = new RuleExecutor();
-            RuleInteractionController ruleInteraction = new RuleInteractionController(ruleResolver, ruleExecutor);
+            var ruleResolver = new RuleResolver(rules);
+            var ruleExecutor = new RuleExecutor();
+            var ruleTrigger = new RuleTriggerController(ruleResolver, ruleExecutor);
+
 
             Context = new GameContext(
                 eventBus,
@@ -211,7 +232,7 @@ namespace ShopGame.Core.Bootstrap
                 manualSearch,
                 craftingStation,
                 craftingStationInteraction,
-                ruleInteraction);
+                ruleTrigger);
 
             ownerInteractionView.Initialize(Context);
             controlInteractionView.Initialize(Context);
@@ -225,6 +246,7 @@ namespace ShopGame.Core.Bootstrap
             KnowledgeSlotDialogueTrigger = new KnowledgeSlotDialogueTrigger(Context, knowledgeSlotDialogueTriggerData);
             KnowledgeSlotDialogueTrigger.Initialize();
 
+            var craftResultHandler = new CraftResultHandler(eventBus, recipeMatcher, ruleTrigger, Context);
             CraftingDialogueTrigger = new CraftingDialogueTrigger(Context, recipeMatcher, craftingDialogueTargetId);
             CraftingDialogueTrigger.Initialize();
 
@@ -237,13 +259,21 @@ namespace ShopGame.Core.Bootstrap
             eventBus.Subscribe<LoopEventTriggeredEvent>(
     OnLoopEventTriggered);
 
+            settingsController.DialogueSpeedChanged += OnDialogueSpeedChanged;
+            settingsController.VolumeChanged += OnVolumeChanged;
+
             loopRestart = new LoopRestartController(loop, eventBus);
 
-            Context.Loop.StartLoop();
+            bgmController.Initialize();
 
             Context.Loop.StartLoop();
 
             loopDialogueController.StartBeginning();
+        }
+
+        private void Start()
+        {
+            audioManager.SetVolume(settingsState.Volume);
         }
 
         private void Update()
@@ -280,6 +310,18 @@ namespace ShopGame.Core.Bootstrap
                 $"Loop event triggered: {eventData.EventId}");
         }
 
+        private void OnDialogueSpeedChanged(
+    DialogueSpeed dialogueSpeed)
+        {
+            Context.DialogueManager.SetSpeed(
+                dialogueSpeed);
+        }
+
+        private void OnVolumeChanged(float volume)
+        {
+            audioManager.SetVolume(volume);
+        }
+
         private void OnDestroy()
         {
             if (Context == null)
@@ -299,6 +341,12 @@ namespace ShopGame.Core.Bootstrap
             loopDialogueController.Dispose();
             ownerDepartureController.Dispose();
             loopRestart.Dispose();
+
+            settingsController.DialogueSpeedChanged -= OnDialogueSpeedChanged;
+            settingsController.VolumeChanged -= OnVolumeChanged;
+
+            bgmController?.Dispose();
+            seController?.Dispose();
         }
     }
 }

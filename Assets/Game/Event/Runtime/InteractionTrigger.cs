@@ -2,7 +2,7 @@ using System;
 
 namespace ShopGame.Event.Runtime
 {
-    public sealed class InteractionTrigger
+    public sealed class InteractionTrigger : ITrigger
     {
         public string TargetId { get; }
 

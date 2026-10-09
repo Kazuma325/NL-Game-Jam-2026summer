@@ -1,5 +1,7 @@
-using System;
+using ShopGame.Core.Context;
 using ShopGame.Core.EventBus;
+using ShopGame.Event.Runtime;
+using System;
 
 namespace ShopGame.Interaction.Runtime
 {
@@ -7,10 +9,14 @@ namespace ShopGame.Interaction.Runtime
     {
         private readonly EventBus eventBus;
         private readonly RecipeMatcher recipeMatcher;
+        private readonly RuleTriggerController ruleTriggerController;
+        private readonly GameContext gameContext;
 
         public CraftResultHandler(
-            EventBus eventBus,
-            RecipeMatcher recipeMatcher)
+    EventBus eventBus,
+    RecipeMatcher recipeMatcher,
+    RuleTriggerController ruleTriggerController,
+    GameContext gameContext)
         {
             this.eventBus =
                 eventBus
@@ -21,6 +27,16 @@ namespace ShopGame.Interaction.Runtime
                 recipeMatcher
                 ?? throw new ArgumentNullException(
                     nameof(recipeMatcher));
+
+            this.ruleTriggerController =
+                ruleTriggerController
+                ?? throw new ArgumentNullException(
+                    nameof(ruleTriggerController));
+
+            this.gameContext =
+                gameContext
+                ?? throw new ArgumentNullException(
+                    nameof(gameContext));
 
             eventBus.Subscribe<ItemCraftedEvent>(
                 HandleItemCrafted);
@@ -38,6 +54,14 @@ namespace ShopGame.Interaction.Runtime
             {
                 UnityEngine.Debug.Log(
                     $"Craft result matched: {itemId}");
+
+                CraftingTrigger trigger =
+                    new CraftingTrigger(
+                        itemId);
+
+                ruleTriggerController.TryTrigger(
+                    trigger,
+                    gameContext);
 
                 return;
             }

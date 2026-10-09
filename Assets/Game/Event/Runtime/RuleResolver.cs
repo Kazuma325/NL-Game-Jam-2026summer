@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using System.Collections.Generic;
 using ShopGame.Core.Context;
 
@@ -15,14 +16,18 @@ namespace ShopGame.Event.Runtime
         }
 
         public Rule Resolve(
-            InteractionTrigger trigger,
-            GameContext context)
+    ITrigger trigger,
+    GameContext context)
         {
             if (trigger == null)
                 throw new ArgumentNullException(nameof(trigger));
 
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
+
+            Debug.Log(
+                $"[RuleResolver] Progress={context.Progress.CurrentProgress}, " +
+                $"Slot={(context.KnowledgeSlot.HasSelection ? context.KnowledgeSlot.SelectedKnowledgeId : "<none>")}");
 
             Rule bestMatch = null;
 
@@ -31,10 +36,20 @@ namespace ShopGame.Event.Runtime
                 if (rule == null)
                     continue;
 
-                if (rule.Trigger.TargetId != trigger.TargetId)
+                if (!IsTriggerMatch(rule.Trigger, trigger))
+                {
                     continue;
+                }
 
-                if (!rule.Condition.Evaluate(context))
+                bool conditionResult =
+                    rule.Condition.Evaluate(context);
+
+                Debug.Log(
+                    $"[RuleResolver] Rule={rule.RuleId}, " +
+                    $"Priority={rule.Priority}, " +
+                    $"Condition={conditionResult}");
+
+                if (!conditionResult)
                     continue;
 
                 if (bestMatch == null ||
@@ -44,7 +59,32 @@ namespace ShopGame.Event.Runtime
                 }
             }
 
+            Debug.Log(
+                $"[RuleResolver] Selected=" +
+                $"{(bestMatch != null ? bestMatch.RuleId : "<none>")}");
+
             return bestMatch;
+        }
+
+        private bool IsTriggerMatch(
+    ITrigger ruleTrigger,
+    ITrigger currentTrigger)
+        {
+            if (ruleTrigger is InteractionTrigger ruleInteraction &&
+                currentTrigger is InteractionTrigger currentInteraction)
+            {
+                return ruleInteraction.TargetId ==
+                       currentInteraction.TargetId;
+            }
+
+            if (ruleTrigger is CraftingTrigger ruleCrafting &&
+                currentTrigger is CraftingTrigger currentCrafting)
+            {
+                return ruleCrafting.RecipeId ==
+                       currentCrafting.RecipeId;
+            }
+
+            return false;
         }
     }
 }

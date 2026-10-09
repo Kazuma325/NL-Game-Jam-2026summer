@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using ShopGame.Core.EventBus;
 using ShopGame.Interaction.Runtime;
+using ShopGame.Loop;
 
 namespace ShopGame.Interaction.Runtime
 {
-    public sealed class CraftingStation : IKnowledgeUsable
+    public sealed class CraftingStation : IKnowledgeUsable, ILoopResettable
     {
         private readonly EventBus eventBus;
 
@@ -123,6 +124,11 @@ namespace ShopGame.Interaction.Runtime
 
             eventBus.Publish(
                 new CraftingMaterialsChangedEvent());
+        }
+
+        public void ResetForLoop()
+        {
+            ResetMaterials();
         }
 
         public bool Create()

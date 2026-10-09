@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7614a6eebe91d964bb58d48ba4c23ca1, type: 3}
+  m_Name: SoundDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::ShopGame.Sound.Data.SoundDatabase
+  bgms:
+  - Id: 0
+    Clip: {fileID: 8300000, guid: 6429772c4e33cc14a884ecd61f7a178f, type: 3}
+  - Id: 1
+    Clip: {fileID: 8300000, guid: 4500f590c80e6b2448145a434564e1cc, type: 3}
+  - Id: 2
+    Clip: {fileID: 8300000, guid: c9edce550d1ad7e48a45eecacf90fbbe, type: 3}
+  - Id: 3
+    Clip: {fileID: 8300000, guid: 8ef3d1ba82989a9468197a80ab48509f, type: 3}
+  ses:
+  - Id: 0
+    Clip: {fileID: 8300000, guid: 6c101b36f5030f34d81754129d876f0f, type: 3}
+  - Id: 1
+    Clip: {fileID: 8300000, guid: 92057e3eeec9cb24fac61fd554de6234, type: 3}
+  - Id: 2
+    Clip: {fileID: 8300000, guid: 0a5b45d714a5f804dad082e96bb591b1, type: 3}
+  - Id: 3
+    Clip: {fileID: 8300000, guid: df3a9eb1c1b30fe49a1ed30ec76a3e19, type: 3}

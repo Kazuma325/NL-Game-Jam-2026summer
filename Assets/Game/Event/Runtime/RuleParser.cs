@@ -73,14 +73,31 @@ namespace ShopGame.Event.Runtime
             string[] triggerTokens = SplitTokens(triggerLine);
 
             if (triggerTokens.Length != 3 ||
-                triggerTokens[0] != "trigger" ||
-                triggerTokens[1] != "interaction")
+                triggerTokens[0] != "trigger")
             {
                 throw new FormatException(
-                    $"Expected interaction trigger at line {index + 1}: {triggerLine}");
+                    $"Invalid trigger at line {index + 1}: {triggerLine}");
             }
 
-            string targetId = triggerTokens[2];
+            TriggerType triggerType =
+                triggerTokens[1] switch
+                {
+                    "interaction" =>
+                        TriggerType.Interaction,
+
+                    "crafting" =>
+                        TriggerType.Crafting,
+
+                    _ => throw new FormatException(
+                        $"Unknown trigger type at line {index + 1}: {triggerLine}")
+                };
+
+            string triggerId = triggerTokens[2];
+
+            TriggerData trigger =
+                new TriggerData(
+                    triggerType,
+                    triggerId);
 
             index++;
 
@@ -167,7 +184,7 @@ namespace ShopGame.Event.Runtime
 
             return new RuleData(
                 ruleId,
-                targetId,
+                trigger,
                 priority,
                 condition,
                 effects);

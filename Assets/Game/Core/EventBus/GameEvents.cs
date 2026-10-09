@@ -1,3 +1,5 @@
+using ShopGame.Dialogue.Runtime;
+
 namespace ShopGame.Core.EventBus
 {
     public readonly struct KnowledgeAddedEvent
@@ -87,6 +89,10 @@ namespace ShopGame.Core.EventBus
     }
 
     public readonly struct KnowledgeSlotChangedEvent
+    {
+    }
+
+    public readonly struct KnowledgeSlotSelectionChangedEvent
     {
     }
 

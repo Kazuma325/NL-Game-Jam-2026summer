@@ -16,7 +16,7 @@ MonoBehaviour:
   targetId: blender
   priority: 10
   knowledgeCondition:
-    Type: 0
+    Type: 1
     KnowledgeId: 
   requiredProgressIds: []
   minimumLoopCount: 0
@@ -28,3 +28,4 @@ MonoBehaviour:
   requiredDeviceStatus: 
   requiredActiveEventIds: []
   consumeKnowledge: 0
+  endLoopOnComplete: 0

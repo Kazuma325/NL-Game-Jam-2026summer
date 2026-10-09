@@ -76,8 +76,17 @@ namespace ShopGame.Loop
             if (eventData.LoopCount == 1)
                 return;
 
-            string dialogueId =
-                $"loop{progress.CurrentProgress}";
+            string dialogueId;
+
+            if (eventData.LoopCount == 2)
+            {
+                dialogueId = "loop0";
+            }
+            else
+            {
+                dialogueId =
+                    $"loop{progress.CurrentProgress}";
+            }
 
             loopStartDialogueId = dialogueId;
 

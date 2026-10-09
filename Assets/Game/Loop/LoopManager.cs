@@ -1,21 +1,22 @@
-using System;
 using ShopGame.Core.EventBus;
 using ShopGame.State.World;
+using System;
+using System.Collections.Generic;
 
 namespace ShopGame.Loop
 {
     public sealed class LoopManager
     {
-        private readonly WorldState worldState;
+        private readonly IReadOnlyList<ILoopResettable> resettableStates;
         private readonly EventBus eventBus;
 
         public int LoopCount { get; private set; }
 
         public bool IsLoopActive { get; private set; }
 
-        public LoopManager(WorldState worldState, EventBus eventBus)
+        public LoopManager(IReadOnlyList<ILoopResettable> resettableStates, EventBus eventBus)
         {
-            this.worldState = worldState ?? throw new ArgumentNullException(nameof(worldState));
+            this.resettableStates = resettableStates ?? throw new ArgumentNullException(nameof(resettableStates));
             this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         }
 
@@ -50,7 +51,11 @@ namespace ShopGame.Loop
                 EndLoop();
             }
 
-            worldState.Reset();
+            foreach (ILoopResettable resettable in resettableStates)
+            {
+                resettable.ResetForLoop();
+            }
+
             StartLoop();
         }
     }

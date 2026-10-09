@@ -1,26 +1,8 @@
-rule owner_disposer_scene0
-trigger interaction owner
-priority 100
-
-conditions all
-    progress equals 0
-    owner present true
-    slot equals disposer
-end
-
-effects
-    dialogue owner_disposer
-    progress advance 1
-    loop end_after_dialogue
-end
-
-
-rule owner_click_scene0
+rule owner_click
 trigger interaction owner
 priority 10
 
 conditions all
-    progress equals 0
     owner present true
     slot not_equals disposer
 end
@@ -30,12 +12,11 @@ effects
 end
 
 
-rule owner_disposer_scene4
+rule owner_disposer
 trigger interaction owner
 priority 100
 
 conditions all
-    progress equals 4
     owner present true
     slot equals disposer
 end
@@ -43,15 +24,21 @@ end
 effects
     dialogue owner_disposer
     progress advance 5
+    loop end_after_dialogue
 end
 
 
-rule control_click_banned_scene0
+rule control_click_banned
 trigger interaction control
 priority 100
 
-conditions all
+conditions any
     progress equals 0
+
+    conditions all
+        progress greater_or_equal 1
+        owner present true
+    end
 end
 
 effects
@@ -80,6 +67,7 @@ priority 10
 
 conditions all
     progress greater_or_equal 1
+    owner present false
     slot not_equals pass5
 end
 
@@ -211,4 +199,62 @@ end
 
 effects
     dialogue customer_click
+end
+
+
+rule blender_customer1_lp0
+trigger crafting correctjoint
+priority 200
+
+conditions all
+    customer present true
+    progress equals 0
+end
+
+effects
+    dialogue blender_customer1_lp0
+    progress advance 1
+    loop end_after_dialogue
+end
+
+
+rule blender_customer1
+trigger crafting correctjoint
+priority 100
+
+conditions all
+    customer present true
+    progress greater_or_equal 1
+end
+
+effects
+    dialogue blender_customer1
+    loop end_after_dialogue
+end
+
+
+rule blender_loactor
+trigger crafting correctlocator
+priority 100
+
+conditions all
+    customer present true
+end
+
+effects
+    dialogue blender_locator
+    progress advance 4
+end
+
+
+rule blender_core
+trigger crafting correctcore
+priority 100
+
+conditions all
+    owner present true
+end
+
+effects
+    dialogue blender_core
 end

@@ -1,3 +1,4 @@
+using ShopGame.Dialogue.Runtime;
 using UnityEngine;
 
 namespace ShopGame.Title.Runtime
@@ -29,6 +30,27 @@ namespace ShopGame.Title.Runtime
         {
             DialogueSpeed = dialogueSpeed;
             PlayerPrefs.SetFloat(DialogueSpeedKey, dialogueSpeed);
+        }
+
+        public DialogueSpeed GetDialogueSpeed()
+        {
+            switch ((int)DialogueSpeed)
+            {
+                case 0:
+                    return Dialogue.Runtime.DialogueSpeed.Slow;
+
+                case 1:
+                    return Dialogue.Runtime.DialogueSpeed.Normal;
+
+                case 2:
+                    return Dialogue.Runtime.DialogueSpeed.Fast;
+
+                case 3:
+                    return Dialogue.Runtime.DialogueSpeed.Instant;
+
+                default:
+                    return Dialogue.Runtime.DialogueSpeed.Normal;
+            }
         }
 
         public void Save()
