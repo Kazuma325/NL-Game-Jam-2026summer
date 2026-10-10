@@ -205,7 +205,7 @@ namespace ShopGame.Core.Bootstrap
             var rules = ruleFactory.CreateAll(ruleDataList);
             var ruleResolver = new RuleResolver(rules);
             var ruleExecutor = new RuleExecutor();
-            var ruleTrigger = new RuleTriggerController(ruleResolver, ruleExecutor);
+            var ruleTrigger = new RuleTriggerController(ruleResolver, ruleExecutor, eventBus);
 
 
             Context = new GameContext(

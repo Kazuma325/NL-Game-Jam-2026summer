@@ -28,6 +28,9 @@ namespace ShopGame.Sound.Runtime
 
             eventBus.Subscribe<KnowledgeSlotSelectionChangedEvent>(
                 OnKnowledgeSlotSelectionChanged);
+
+            eventBus.Subscribe<InteractionPerformedEvent>(
+                OnInteractionPerformed);
         }
 
         public void Dispose()
@@ -40,6 +43,9 @@ namespace ShopGame.Sound.Runtime
 
             eventBus.Unsubscribe<KnowledgeSlotSelectionChangedEvent>(
                 OnKnowledgeSlotSelectionChanged);
+
+            eventBus.Unsubscribe<InteractionPerformedEvent>(
+                OnInteractionPerformed);
         }
 
         private void OnItemCrafted(
@@ -65,6 +71,12 @@ namespace ShopGame.Sound.Runtime
     KnowledgeSlotSelectionChangedEvent eventData)
         {
             soundManager.PlaySe(SeId.KnowledgeSelect);
+        }
+
+        private void OnInteractionPerformed(
+    InteractionPerformedEvent eventData)
+        {
+            soundManager.PlaySe(SeId.Interaction);
         }
     }
 }

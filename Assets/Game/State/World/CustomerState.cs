@@ -1,5 +1,4 @@
 using ShopGame.Core.EventBus;
-using ShopGame.Core.EventBus.ShopGame.Core.EventBus;
 using System;
 
 namespace ShopGame.State.World

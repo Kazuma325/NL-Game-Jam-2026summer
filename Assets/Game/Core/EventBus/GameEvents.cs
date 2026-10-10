@@ -96,16 +96,17 @@ namespace ShopGame.Core.EventBus
     {
     }
 
-    namespace ShopGame.Core.EventBus
+    public readonly struct InteractionPerformedEvent
     {
-        public readonly struct CustomerStateChangedEvent
-        {
-            public bool IsPresent { get; }
+    }
 
-            public CustomerStateChangedEvent(bool isPresent)
-            {
-                IsPresent = isPresent;
-            }
+    public readonly struct CustomerStateChangedEvent
+    {
+        public bool IsPresent { get; }
+
+        public CustomerStateChangedEvent(bool isPresent)
+        {
+            IsPresent = isPresent;
         }
     }
 }

@@ -1,4 +1,5 @@
 using ShopGame.Core.Context;
+using ShopGame.Core.EventBus;
 using System;
 
 namespace ShopGame.Event.Runtime
@@ -7,10 +8,12 @@ namespace ShopGame.Event.Runtime
     {
         private readonly RuleResolver ruleResolver;
         private readonly RuleExecutor ruleExecutor;
+        private readonly EventBus eventBus;
 
         public RuleTriggerController(
-            RuleResolver ruleResolver,
-            RuleExecutor ruleExecutor)
+    RuleResolver ruleResolver,
+    RuleExecutor ruleExecutor,
+    EventBus eventBus)
         {
             this.ruleResolver =
                 ruleResolver
@@ -21,6 +24,11 @@ namespace ShopGame.Event.Runtime
                 ruleExecutor
                 ?? throw new ArgumentNullException(
                     nameof(ruleExecutor));
+
+            this.eventBus =
+                eventBus
+                ?? throw new ArgumentNullException(
+                    nameof(eventBus));
         }
 
         public bool TryTrigger(
@@ -38,6 +46,9 @@ namespace ShopGame.Event.Runtime
                 throw new ArgumentNullException(
                     nameof(context));
             }
+
+            eventBus.Publish(
+    new InteractionPerformedEvent());
 
             Rule rule =
                 ruleResolver.Resolve(
