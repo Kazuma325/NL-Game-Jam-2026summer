@@ -16,6 +16,8 @@ using ShopGame.Interaction.View;
 using ShopGame.Loop;
 using ShopGame.Loop.Data;
 using ShopGame.Manual.Runtime;
+using ShopGame.Save.Runtime;
+using ShopGame.Save.Data;
 using ShopGame.Sound.Data;
 using ShopGame.Sound.Runtime;
 using ShopGame.Sound.View;
@@ -37,6 +39,9 @@ namespace ShopGame.Core.Bootstrap
 
         [SerializeField]
         private LoopEventData[] loopEventData = Array.Empty<LoopEventData>();
+
+        [SerializeField]
+        private LoopTransitionController loopTransitionController;
 
         [SerializeField]
         private TextAsset interactionRulesText;
@@ -117,9 +122,14 @@ namespace ShopGame.Core.Bootstrap
         [SerializeField]
         private AudioManager audioManager;
 
+        [SerializeField]
+        private SoundSettingsController soundSettingsController;
+
         private SettingsState settingsState;
         private BgmController bgmController;
         private SeController seController;
+        private SaveManager saveManager;
+        private SaveData loadedSaveData;
 
         public DialoguePortraitRepository DialoguePortraitRepository
         {
@@ -148,10 +158,15 @@ namespace ShopGame.Core.Bootstrap
 
         private void Awake()
         {
+            saveManager = new SaveManager();
+            int selectedSlot = SaveSlotSelection.SelectedSlot;
+            loadedSaveData = saveManager.Load(selectedSlot);
             var eventBus = new GameEventBus();
             var soundManager = new SoundManager(soundDatabase, audioSourceView);
+            soundSettingsController.Initialize(soundManager);
             var knowledge = new KnowledgeState(eventBus);
             var progress = new GameProgress(eventBus);
+            if (loadedSaveData != null) progress.Restore(loadedSaveData.currentProgress);
             bgmController = new BgmController(soundManager, progress, eventBus);
             seController =new SeController(soundManager, eventBus);
             var world = new WorldState(initialRoomId, eventBus);
@@ -262,13 +277,25 @@ namespace ShopGame.Core.Bootstrap
             settingsController.DialogueSpeedChanged += OnDialogueSpeedChanged;
             settingsController.VolumeChanged += OnVolumeChanged;
 
-            loopRestart = new LoopRestartController(loop, eventBus);
+            eventBus.Subscribe<ProgressCompletedEvent>(
+    OnProgressCompleted);
+
+            loopRestart = new LoopRestartController(loop, eventBus, loopTransitionController, seController);
 
             bgmController.Initialize();
 
-            Context.Loop.StartLoop();
+            if (loadedSaveData != null)
+            {
+                Context.Loop.RestoreLoopCount(
+                    loadedSaveData.loopCount);
 
-            loopDialogueController.StartBeginning();
+                Context.Loop.StartRestoredLoop();
+            }
+            else
+            {
+                Context.Loop.StartLoop();
+                loopDialogueController.StartBeginning();
+            }
         }
 
         private void Start()
@@ -295,6 +322,7 @@ namespace ShopGame.Core.Bootstrap
     LoopStartedEvent eventData)
         {
             Context.LoopTimer.Start();
+            SaveCurrentGame();
         }
 
         private void OnLoopEnded(
@@ -336,6 +364,9 @@ namespace ShopGame.Core.Bootstrap
             Context.EventBus.Unsubscribe<LoopEventTriggeredEvent>(
                 OnLoopEventTriggered);
 
+            Context.EventBus.Unsubscribe<ProgressCompletedEvent>(
+                OnProgressCompleted);
+
             Context.LoopEnd.Dispose();
             loopEventScheduler.Dispose();
             loopDialogueController.Dispose();
@@ -348,5 +379,49 @@ namespace ShopGame.Core.Bootstrap
             bgmController?.Dispose();
             seController?.Dispose();
         }
+
+
+        public void SaveCurrentGame()
+        {
+            if (Context == null || saveManager == null)
+            {
+                Debug.LogWarning(
+                    "Cannot save because the game is not initialized.");
+                return;
+            }
+
+            var saveData = new SaveData
+            {
+                currentProgress = Context.Progress.CurrentProgress,
+                loopCount = Context.Loop.LoopCount
+            };
+
+            try
+            {
+                saveManager.Save(SaveSlotSelection.SelectedSlot, saveData);
+
+                Debug.Log(
+                    $"Game saved to slot {SaveSlotSelection.SelectedSlot}. " +
+                    $"Progress: {saveData.currentProgress}, " +
+                    $"Loop: {saveData.loopCount}");
+            }
+            catch (System.IO.IOException exception)
+            {
+                Debug.LogError(
+                    $"Failed to save game: {exception.Message}");
+            }
+            catch (UnauthorizedAccessException exception)
+            {
+                Debug.LogError(
+                    $"Cannot access save file: {exception.Message}");
+            }
+        }
+
+        private void OnProgressCompleted(
+    ProgressCompletedEvent eventData)
+        {
+            SaveCurrentGame();
+        }
+
     }
 }

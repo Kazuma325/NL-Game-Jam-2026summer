@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 namespace ShopGame.Sound.View
@@ -13,14 +14,10 @@ namespace ShopGame.Sound.View
         public void PlayBgm(AudioClip clip)
         {
             if (clip == null)
-            {
                 return;
-            }
 
             if (bgmSource.clip == clip && bgmSource.isPlaying)
-            {
                 return;
-            }
 
             bgmSource.clip = clip;
             bgmSource.loop = true;
@@ -36,11 +33,19 @@ namespace ShopGame.Sound.View
         public void PlaySe(AudioClip clip)
         {
             if (clip == null)
-            {
                 return;
-            }
 
             seSource.PlayOneShot(clip);
+        }
+
+        public void SetBgmVolume(float volume)
+        {
+            bgmSource.volume = Mathf.Clamp01(volume);
+        }
+
+        public void SetSeVolume(float volume)
+        {
+            seSource.volume = Mathf.Clamp01(volume);
         }
     }
 }

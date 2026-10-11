@@ -23,9 +23,6 @@ namespace ShopGame.Sound.Runtime
             eventBus.Subscribe<ItemCraftedEvent>(
                 OnItemCrafted);
 
-            eventBus.Subscribe<LoopStartedEvent>(
-                OnLoopStarted);
-
             eventBus.Subscribe<KnowledgeSlotSelectionChangedEvent>(
                 OnKnowledgeSlotSelectionChanged);
 
@@ -37,9 +34,6 @@ namespace ShopGame.Sound.Runtime
         {
             eventBus.Unsubscribe<ItemCraftedEvent>(
                 OnItemCrafted);
-
-            eventBus.Unsubscribe<LoopStartedEvent>(
-                OnLoopStarted);
 
             eventBus.Unsubscribe<KnowledgeSlotSelectionChangedEvent>(
                 OnKnowledgeSlotSelectionChanged);
@@ -55,18 +49,6 @@ namespace ShopGame.Sound.Runtime
                 SeId.BlenderCreate);
         }
 
-        private void OnLoopStarted(
-            LoopStartedEvent eventData)
-        {
-            if (eventData.LoopCount <= 1)
-            {
-                return;
-            }
-
-            soundManager.PlaySe(
-                SeId.LoopRestart);
-        }
-
         private void OnKnowledgeSlotSelectionChanged(
     KnowledgeSlotSelectionChangedEvent eventData)
         {
@@ -77,6 +59,11 @@ namespace ShopGame.Sound.Runtime
     InteractionPerformedEvent eventData)
         {
             soundManager.PlaySe(SeId.Interaction);
+        }
+
+        public void PlayLoopRestartSe()
+        {
+            soundManager.PlaySe(SeId.LoopRestart);
         }
     }
 }

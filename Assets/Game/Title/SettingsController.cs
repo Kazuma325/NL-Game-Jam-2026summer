@@ -1,3 +1,4 @@
+
 using ShopGame.Dialogue.Runtime;
 using System;
 using UnityEngine;
@@ -16,10 +17,17 @@ namespace ShopGame.Title.Runtime
         private Slider volumeSlider;
 
         [SerializeField]
+        private Slider seVolumeSlider;
+
+        [SerializeField]
         private Slider dialogueSpeedSlider;
 
         public event Action<DialogueSpeed> DialogueSpeedChanged;
         public event Action<float> VolumeChanged;
+        public event Action<float> SeVolumeChanged;
+
+        public float Volume => settingsState?.Volume ?? 1f;
+        public float SeVolume => settingsState?.SeVolume ?? 1f;
 
         private void Awake()
         {
@@ -29,7 +37,7 @@ namespace ShopGame.Title.Runtime
 
             if (volumeSlider == null)
                 throw new InvalidOperationException(
-                    "Volume Slider is not assigned.");
+                    "BGM Volume Slider is not assigned.");
 
             if (dialogueSpeedSlider == null)
                 throw new InvalidOperationException(
@@ -40,13 +48,22 @@ namespace ShopGame.Title.Runtime
             settingsState = SettingsState.Load();
 
             volumeSlider.value = settingsState.Volume;
-            dialogueSpeedSlider.value = settingsState.DialogueSpeed;
+            dialogueSpeedSlider.value =
+                settingsState.DialogueSpeed;
 
             volumeSlider.onValueChanged.AddListener(
                 OnVolumeChanged);
 
             dialogueSpeedSlider.onValueChanged.AddListener(
                 OnDialogueSpeedChanged);
+
+            if (seVolumeSlider != null)
+            {
+                seVolumeSlider.value = settingsState.SeVolume;
+
+                seVolumeSlider.onValueChanged.AddListener(
+                    OnSeVolumeChanged);
+            }
         }
 
         public void OpenSettings()
@@ -57,7 +74,6 @@ namespace ShopGame.Title.Runtime
         public void CloseSettings()
         {
             settingsState.Save();
-
             settingsPanel.SetActive(false);
         }
 
@@ -65,6 +81,12 @@ namespace ShopGame.Title.Runtime
         {
             settingsState.SetVolume(value);
             VolumeChanged?.Invoke(value);
+        }
+
+        private void OnSeVolumeChanged(float value)
+        {
+            settingsState.SetSeVolume(value);
+            SeVolumeChanged?.Invoke(value);
         }
 
         private void OnDialogueSpeedChanged(float value)
@@ -77,11 +99,23 @@ namespace ShopGame.Title.Runtime
 
         private void OnDestroy()
         {
-            volumeSlider.onValueChanged.RemoveListener(
-                OnVolumeChanged);
+            if (volumeSlider != null)
+            {
+                volumeSlider.onValueChanged.RemoveListener(
+                    OnVolumeChanged);
+            }
 
-            dialogueSpeedSlider.onValueChanged.RemoveListener(
-                OnDialogueSpeedChanged);
+            if (seVolumeSlider != null)
+            {
+                seVolumeSlider.onValueChanged.RemoveListener(
+                    OnSeVolumeChanged);
+            }
+
+            if (dialogueSpeedSlider != null)
+            {
+                dialogueSpeedSlider.onValueChanged.RemoveListener(
+                    OnDialogueSpeedChanged);
+            }
         }
     }
 }

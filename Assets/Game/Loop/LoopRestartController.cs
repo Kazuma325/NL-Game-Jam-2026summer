@@ -1,5 +1,7 @@
-using System;
+
 using ShopGame.Core.EventBus;
+using ShopGame.Sound.Runtime;
+using System;
 
 namespace ShopGame.Loop
 {
@@ -7,12 +9,16 @@ namespace ShopGame.Loop
     {
         private readonly LoopManager loopManager;
         private readonly EventBus eventBus;
+        private readonly LoopTransitionController transitionController;
+        private readonly SeController seController;
 
         private bool restartPending;
 
         public LoopRestartController(
-            LoopManager loopManager,
-            EventBus eventBus)
+    LoopManager loopManager,
+    EventBus eventBus,
+    LoopTransitionController transitionController,
+    SeController seController)
         {
             this.loopManager =
                 loopManager
@@ -24,6 +30,14 @@ namespace ShopGame.Loop
                 ?? throw new ArgumentNullException(
                     nameof(eventBus));
 
+            this.transitionController =
+                transitionController;
+
+            this.seController =
+                seController
+                ?? throw new ArgumentNullException(
+                    nameof(seController));
+
             eventBus.Subscribe<LoopEndedEvent>(
                 OnLoopEnded);
         }
@@ -34,7 +48,24 @@ namespace ShopGame.Loop
                 return;
 
             restartPending = false;
-            loopManager.RestartLoop();
+
+            // 演出が設定されていない場合の予備処理
+            if (transitionController == null)
+            {
+                loopManager.RestartLoop();
+                return;
+            }
+
+            seController.PlayLoopRestartSe();
+
+            // 演出が白く覆い終わってからループを再開する
+            transitionController.PlayLoopEffect(() =>
+            {
+                loopManager.RestartLoop();
+
+                // 新しいループが始まった後に画面を戻す
+                transitionController.PlayFadeFromWhite();
+            });
         }
 
         public void Dispose()
@@ -43,8 +74,7 @@ namespace ShopGame.Loop
                 OnLoopEnded);
         }
 
-        private void OnLoopEnded(
-    LoopEndedEvent eventData)
+        private void OnLoopEnded(LoopEndedEvent eventData)
         {
             restartPending = true;
         }

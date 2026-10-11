@@ -48,5 +48,19 @@ namespace ShopGame.State.Progress
         {
             CurrentProgress = 0;
         }
+
+
+        public void Restore(int progress)
+        {
+            if (progress < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(progress),
+                    "Progress must not be negative.");
+            }
+
+            CurrentProgress = progress;
+        }
+
     }
 }

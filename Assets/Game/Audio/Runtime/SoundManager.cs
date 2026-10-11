@@ -1,3 +1,4 @@
+
 using System;
 using ShopGame.Sound.Data;
 using ShopGame.Sound.View;
@@ -25,7 +26,6 @@ namespace ShopGame.Sound.Runtime
         public void PlayBgm(BgmId bgmId)
         {
             var clip = soundDatabase.GetBgmClip(bgmId);
-
             audioSourceView.PlayBgm(clip);
         }
 
@@ -37,8 +37,17 @@ namespace ShopGame.Sound.Runtime
         public void PlaySe(SeId seId)
         {
             var clip = soundDatabase.GetSeClip(seId);
-
             audioSourceView.PlaySe(clip);
+        }
+
+        public void SetBgmVolume(float volume)
+        {
+            audioSourceView.SetBgmVolume(volume);
+        }
+
+        public void SetSeVolume(float volume)
+        {
+            audioSourceView.SetSeVolume(volume);
         }
     }
 }

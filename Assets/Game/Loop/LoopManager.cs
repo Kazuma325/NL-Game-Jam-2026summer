@@ -20,6 +20,36 @@ namespace ShopGame.Loop
             this.eventBus = eventBus ?? throw new ArgumentNullException(nameof(eventBus));
         }
 
+
+        public void RestoreLoopCount(int loopCount)
+        {
+            if (loopCount < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(loopCount),
+                    "Loop count must not be negative.");
+            }
+
+            if (IsLoopActive)
+            {
+                throw new InvalidOperationException(
+                    "Cannot restore loop count while a loop is active.");
+            }
+
+            LoopCount = loopCount;
+        }
+
+        public void StartRestoredLoop()
+        {
+            if (IsLoopActive)
+            {
+                return;
+            }
+
+            IsLoopActive = true;
+            eventBus.Publish(new LoopStartedEvent(LoopCount));
+        }
+
         public void StartLoop()
         {
             if (IsLoopActive)

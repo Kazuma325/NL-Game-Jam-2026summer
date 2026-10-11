@@ -11,6 +11,9 @@ namespace ShopGame.Interaction.View
     public sealed class CraftingStationViewController : MonoBehaviour
     {
         [SerializeField]
+        private GameObject materialsArea;
+
+        [SerializeField]
         private Transform materialsContent;
 
         [SerializeField]
@@ -70,8 +73,13 @@ namespace ShopGame.Interaction.View
         {
             ClearMaterialEntries();
 
-            foreach (string materialId in
-         craftingStation.GetInsertedMaterials())
+            var materials = craftingStation.GetInsertedMaterials();
+
+            bool hasMaterials = materials.Count > 0;
+
+            materialsArea.SetActive(hasMaterials);
+
+            foreach (string materialId in materials)
             {
                 CraftingMaterialEntryView entry =
                     Instantiate(
