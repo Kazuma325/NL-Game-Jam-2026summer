@@ -78,7 +78,6 @@ namespace ShopGame.Sound.Runtime
             {
                 case "control_enter":
                 case "study_enter":
-                case "blender_core":
                     ApplyDefaultBgm();
                     break;
             }

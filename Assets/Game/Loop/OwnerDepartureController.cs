@@ -16,6 +16,9 @@ namespace ShopGame.Loop
         private const string CustomerDialogueId =
             "customer";
 
+        private const string BlenderCoreDialogueId =
+            "blender_core";
+
         private const float DialogueTransitionDelaySeconds = 0.2f;
 
         private float dialogueTransitionTimer;
@@ -122,6 +125,16 @@ namespace ShopGame.Loop
 
         private void HandleOwnerDeparture()
         {
+            // blender_core中はowner_departureによる処理を行わない
+            if (dialogueManager.IsPlaying &&
+                dialogueManager.CurrentDialogueId == BlenderCoreDialogueId)
+            {
+                UnityEngine.Debug.Log(
+                    "OwnerDepartureController: skipped because blender_core is playing.");
+
+                return;
+            }
+
             ownerState.Depart();
 
             string dialogueId =

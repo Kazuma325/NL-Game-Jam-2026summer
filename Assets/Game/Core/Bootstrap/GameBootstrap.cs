@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using GameEventBus = ShopGame.Core.EventBus.EventBus;
+using ShopGame.Ending;
 
 namespace ShopGame.Core.Bootstrap
 {
@@ -124,6 +125,9 @@ namespace ShopGame.Core.Bootstrap
 
         [SerializeField]
         private SoundSettingsController soundSettingsController;
+
+        [SerializeField]
+        private EndingTransitionController endingTransitionController;
 
         private SettingsState settingsState;
         private BgmController bgmController;
@@ -283,6 +287,8 @@ namespace ShopGame.Core.Bootstrap
             loopRestart = new LoopRestartController(loop, eventBus, loopTransitionController, seController);
 
             bgmController.Initialize();
+
+            endingTransitionController.Initialize(eventBus);
 
             if (loadedSaveData != null)
             {
